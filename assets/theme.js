@@ -33,16 +33,67 @@
     const wrapper = input.closest('form');
     let results;
     let timer;
+    let activeIndex = -1;
+
+    const setExpanded = (expanded) => {
+      input.setAttribute('aria-expanded', String(expanded));
+      if (results) results.hidden = !expanded;
+    };
+
+    const clearResults = () => {
+      activeIndex = -1;
+      setExpanded(false);
+      if (results) results.replaceChildren();
+    };
+
+    const setActiveResult = (index) => {
+      if (!results) return;
+      const options = [...results.querySelectorAll('[role="option"]')];
+      options.forEach((option, optionIndex) => {
+        option.setAttribute('aria-selected', String(optionIndex === index));
+      });
+      activeIndex = index;
+      if (index >= 0 && options[index]) {
+        input.setAttribute('aria-activedescendant', options[index].id);
+      } else {
+        input.removeAttribute('aria-activedescendant');
+      }
+    };
+
+    input.addEventListener('keydown', (event) => {
+      if (!results || results.hidden) return;
+      const options = [...results.querySelectorAll('[role="option"]')];
+      if (!options.length) return;
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setActiveResult(activeIndex < options.length - 1 ? activeIndex + 1 : 0);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setActiveResult(activeIndex > 0 ? activeIndex - 1 : options.length - 1);
+      } else if (event.key === 'Enter' && activeIndex >= 0 && options[activeIndex]) {
+        event.preventDefault();
+        options[activeIndex].click();
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        clearResults();
+      }
+    });
+
     input.addEventListener('input', () => {
       clearTimeout(timer);
       const query = input.value.trim();
+      input.removeAttribute('aria-activedescendant');
+
       if (query.length < 2) {
-        if (results) results.hidden = true;
+        clearResults();
         return;
       }
+
       timer = setTimeout(() => {
         const root = window.Shopify?.routes?.root || '/';
         const url = root + 'search/suggest.json?q=' + encodeURIComponent(query) + '&resources[type]=product,collection,article,page&resources[limit]=4';
+
         fetch(url)
           .then((response) => response.json())
           .then((data) => {
@@ -51,33 +102,49 @@
             const collections = resources.collections || [];
             const articles = resources.articles || [];
             const pages = resources.pages || [];
+
             if (!results) {
               results = document.createElement('div');
+              results.id = 'PredictiveSearch-' + input.id;
               results.className = 'predictive-search';
               results.setAttribute('role', 'listbox');
               wrapper.appendChild(results);
+              input.setAttribute('aria-controls', results.id);
             }
+
             const items = [
               ...products.map((item) => ({ url: item.url, title: item.title })),
               ...collections.map((item) => ({ url: item.url, title: item.title })),
               ...articles.map((item) => ({ url: item.url, title: item.title })),
               ...pages.map((item) => ({ url: item.url, title: item.title }))
             ].slice(0, 10);
+
             results.replaceChildren();
+            activeIndex = -1;
+
             if (items.length) {
               const heading = document.createElement('strong');
               heading.textContent = 'Suggestions';
               results.appendChild(heading);
-              items.forEach((item) => {
+
+              items.forEach((item, index) => {
                 const link = document.createElement('a');
+                link.id = results.id + '-option-' + index;
                 link.href = item.url;
                 link.textContent = item.title;
                 link.setAttribute('role', 'option');
+                link.setAttribute('aria-selected', 'false');
                 results.appendChild(link);
               });
-            }            results.hidden = !items.length;
+
+              setExpanded(true);
+            } else {
+              clearResults();
+            }
           })
-          .catch(() => {});
+          .catch(() => {
+            clearResults();
+          });
       }, 180);
     });
   });
