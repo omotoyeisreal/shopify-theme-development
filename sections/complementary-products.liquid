@@ -1,0 +1,29 @@
+<section class="section product-recommendations complementary-products" data-product-recommendations>
+  <div class="container">
+    <div data-recommendations-content>
+      <h2>Pair it with</h2>
+    </div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const section = document.currentScript.closest('.complementary-products');
+    if (!section) return;
+    const target = section.querySelector('[data-recommendations-content]');
+    const url = '{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4&intent=complementary';
+    fetch(url)
+      .then((response) => response.text())
+      .then((html) => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = html;
+        const content = wrapper.querySelector('[data-recommendations-content]');
+        if (content && content.querySelector('.product-grid')) target.innerHTML = content.innerHTML;
+      })
+      .catch(() => {});
+  })();
+</script>
+
+{% schema %}
+{"name":"Complementary products","settings":[],"presets":[{"name":"Complementary products"}]}
+{% endschema %}
