@@ -16,7 +16,7 @@
     </div>
 
     <div class="product__info">
-      {% form 'product', product, class: 'product-form', data-product-form: '' %}
+      {% form 'product', product, class: 'product-form', data-product-form: '', data-requires-selling-plan: product.requires_selling_plan %}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
       {% for block in section.blocks %}
         {% case block.type %}
