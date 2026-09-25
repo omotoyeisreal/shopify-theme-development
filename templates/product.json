@@ -30,6 +30,9 @@
         },
         "trust": {
           "type": "trust"
+        },
+        "selling_plans": {
+          "type": "selling_plans"
         }
       },
       "block_order": [
@@ -38,6 +41,7 @@
         "price",
         "options",
         "quantity",
+        "selling_plans",
         "buy_buttons",
         "description",
         "trust"
