@@ -1,7 +1,6 @@
 <header class="header">
   <div class="container header__inner">
     <a class="header__logo" href="{{ routes.root_url }}">{{ shop.name }}</a>
-
     <nav class="header__nav" aria-label="Main navigation">
       {% for link in section.settings.menu.links %}
         <div class="header__nav-item">
@@ -13,9 +12,7 @@
                   <a href="{{ child_link.url }}">{{ child_link.title }}</a>
                   {% if child_link.links.size > 0 %}
                     <div class="header__submenu-nested">
-                      {% for grandchild_link in child_link.links %}
-                        <a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>
-                      {% endfor %}
+                      {% for grandchild_link in child_link.links %}<a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>{% endfor %}
                     </div>
                   {% endif %}
                 </div>
@@ -25,30 +22,21 @@
         </div>
       {% endfor %}
     </nav>
-
     <div class="header__actions">
-      {% if shop.customer_accounts_enabled %}
-        <shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account>
-      {% endif %}
+      {% if shop.customer_accounts_enabled %}<shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account>{% endif %}
       <form class="header__search" action="{{ routes.search_url }}" method="get" role="search">
         <label class="visually-hidden" for="HeaderSearch-{{ section.id }}">Search</label>
-        <input id="HeaderSearch-{{ section.id }}" type="search" name="q" placeholder="Search" autocomplete="off" data-predictive-search>
+        <input id="HeaderSearch-{{ section.id }}" type="search" name="q" placeholder="Search" autocomplete="off" data-predictive-search aria-controls="PredictiveSearch-{{ section.id }}" aria-expanded="false">
         <input type="hidden" name="options[prefix]" value="last">
         <button type="submit">Search</button>
       </form>
       <a class="header__cart" href="{{ routes.cart_url }}">Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}</a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="MobileMenu-{{ section.id }}" data-menu-toggle>
-        <span class="visually-hidden">Toggle navigation</span>
-        Menu
-      </button>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="MobileMenu-{{ section.id }}" data-menu-toggle><span class="visually-hidden">Toggle navigation</span>Menu</button>
     </div>
   </div>
-
-  <nav id="MobileMenu-{{ section.id }}" class="mobile-menu" aria-label="Mobile navigation" data-mobile-menu hidden>
+  <nav id="MobileMenu-{{ section.id }}" class="mobile-menu" aria-label="Mobile navigation" data-mobile-menu>
     <div class="container">
-      {% if shop.customer_accounts_enabled %}
-        <div class="mobile-menu__account"><shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account></div>
-      {% endif %}
+      {% if shop.customer_accounts_enabled %}<div class="mobile-menu__account"><shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account></div>{% endif %}
       {% for link in section.settings.menu.links %}
         <div class="mobile-menu__item">
           <a href="{{ link.url }}">{{ link.title }}</a>
@@ -56,11 +44,7 @@
             <div class="mobile-menu__submenu">
               {% for child_link in link.links %}
                 <a href="{{ child_link.url }}">{{ child_link.title }}</a>
-                {% if child_link.links.size > 0 %}
-                  <div class="mobile-menu__submenu-nested">
-                    {% for grandchild_link in child_link.links %}<a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>{% endfor %}
-                  </div>
-                {% endif %}
+                {% if child_link.links.size > 0 %}<div class="mobile-menu__submenu-nested">{% for grandchild_link in child_link.links %}<a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>{% endfor %}</div>{% endif %}
               {% endfor %}
             </div>
           {% endif %}
@@ -69,23 +53,6 @@
     </div>
   </nav>
 </header>
-
 {% schema %}
-{
-  "name": "Header",
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Navigation menu",
-      "default": "main-menu"
-    },
-    {
-      "type": "link_list",
-      "id": "customer_account_menu",
-      "label": "Customer account menu",
-      "default": "customer-account-main-menu"
-    }
-  ]
-}
+{"name":"Header","settings":[{"type":"link_list","id":"menu","label":"Navigation menu","default":"main-menu"},{"type":"link_list","id":"customer_account_menu","label":"Customer account menu","default":"customer-account-main-menu"}]}
 {% endschema %}
