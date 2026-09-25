@@ -1,0 +1,44 @@
+{% assign featured_product = section.settings.product %}
+{% if featured_product != blank %}
+<section class="section featured-product">
+  <div class="container product__layout">
+    <div class="product__media">
+      {% for media in featured_product.media %}
+        <div class="product-gallery__item">
+          {% case media.media_type %}
+            {% when 'image' %}
+              {{ media | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 800, 1000, 1200', sizes: '(min-width: 901px) 55vw, 100vw', alt: media.alt | default: featured_product.title | escape }}
+            {% else %}
+              {{ media | media_tag: image_size: '1200x', controls: true }}
+          {% endcase %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class="product__info">
+      {% form 'product', featured_product %}
+        <input type="hidden" name="id" value="{{ featured_product.selected_or_first_available_variant.id }}">
+        <p class="product__vendor">{{ featured_product.vendor }}</p>
+        <h2><a href="{{ featured_product.url }}">{{ featured_product.title }}</a></h2>
+        <div class="product__price">{{ featured_product.selected_or_first_available_variant.price | money }}</div>
+        {% if featured_product.selected_or_first_available_variant.unit_price_measurement %}
+          <div class="product__unit-price">{{ featured_product.selected_or_first_available_variant.unit_price | money }} / {{ featured_product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}</div>
+        {% endif %}
+        {% if featured_product.description != blank %}<div class="product__description rte">{{ featured_product.description }}</div>{% endif %}
+        <button class="button" type="submit" {% unless featured_product.selected_or_first_available_variant.available %}disabled{% endunless %}>{% if featured_product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}</button>
+        {{ form | payment_button }}
+      {% endform %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Featured product",
+  "settings": [
+    {"type":"product","id":"product","label":"Product"}
+  ],
+  "blocks": [{"type":"@app"}],
+  "presets": [{"name":"Featured product"}]
+}
+{% endschema %}
