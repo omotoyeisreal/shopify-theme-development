@@ -127,6 +127,16 @@
     }
   };
 
+  document.querySelectorAll('[data-swatch-option][data-swatch-value]').forEach((swatch) => {
+    swatch.addEventListener('click', () => {
+      const select = selectors.find((item) => item.name === 'options[' + swatch.dataset.swatchOption + ']');
+      if (select) {
+        select.value = swatch.dataset.swatchValue;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+  });
+
   selectors.forEach((select) => select.addEventListener('change', updateVariant));
   updateVariant();
 })();
