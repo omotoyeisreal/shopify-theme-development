@@ -1,17 +1,45 @@
 <section class="section search-page">
   <div class="container">
     <h1>Search</h1>
-    <form action="{{ routes.search_url }}" method="get" role="search">
+    <form class="collection-filters" action="{{ routes.search_url }}" method="get" role="search">
       <label for="SearchInput">Search products</label>
       <input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" autocomplete="off" data-predictive-search>
       <input type="hidden" name="options[prefix]" value="last">
+      {% if search.sort_options %}
+        <label for="SearchSort">Sort by</label>
+        <select id="SearchSort" name="sort_by" onchange="this.form.submit()">
+          {% for option in search.sort_options %}<option value="{{ option.value }}" {% if option.value == search.sort_by %}selected{% endif %}>{{ option.name }}</option>{% endfor %}
+        </select>
+      {% endif %}
+      {% if search.filters.size > 0 %}
+        {% for filter in search.filters %}
+          <fieldset>
+            <legend>{{ filter.label }}</legend>
+            {% case filter.type %}
+              {% when 'list' %}
+                {% for value in filter.values %}
+                  <label><input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} onchange="this.form.submit()"> {{ value.label }} ({{ value.count }})</label>
+                {% endfor %}
+              {% when 'price_range' %}
+                <label>{{ filter.min_value.label }} <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | default: 0 }}" min="0"></label>
+                <label>{{ filter.max_value.label }} <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | default: filter.range_max }}" min="0"></label>
+            {% endcase %}
+          </fieldset>
+        {% endfor %}
+      {% endif %}
       <button class="button" type="submit">Search</button>
     </form>
     {% if search.performed %}
       <p>{{ search.results_count }} results for “{{ search.terms }}”</p>
       {% paginate search.results by 12 %}
         <div class="product-grid">
-          {% for item in search.results %}{% if item.object_type == 'product' %}{% render 'product-card', product: item %}{% else %}<article><h2><a href="{{ item.url }}">{{ item.title }}</a></h2></article>{% endif %}{% else %}<p>No results found.</p>{% endfor %}
+          {% for item in search.results %}
+            {% case item.object_type %}
+              {% when 'product' %}{% render 'product-card', product: item %}
+              {% when 'article' %}<article>{% if item.image %}{{ item.image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 901px) 33vw, 100vw', alt: item.image.alt | escape }}{% endif %}<h2><a href="{{ item.url }}">{{ item.title }}</a></h2></article>
+              {% else %}<article><h2><a href="{{ item.url }}">{{ item.title }}</a></h2></article>
+            {% endcase %}
+          {% else %}<p>No results found.</p>{% endfor %}
         </div>
         {% if paginate.pages > 1 %}<nav class="pagination" aria-label="Pagination">{% if paginate.previous %}<a href="{{ paginate.previous.url }}">Previous</a>{% endif %}<span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>{% if paginate.next %}<a href="{{ paginate.next.url }}">Next</a>{% endif %}</nav>{% endif %}
       {% endpaginate %}
