@@ -40,7 +40,8 @@
         return;
       }
       timer = setTimeout(() => {
-        const url = '/search/suggest.json?q=' + encodeURIComponent(query) + '&resources[type]=product,collection,article,page&resources[limit]=4';
+        const root = window.Shopify?.routes?.root || '/';
+        const url = root + 'search/suggest.json?q=' + encodeURIComponent(query) + '&resources[type]=product,collection,article,page&resources[limit]=4';
         fetch(url)
           .then((response) => response.json())
           .then((data) => {
@@ -56,13 +57,24 @@
               wrapper.appendChild(results);
             }
             const items = [
-              ...products.map((item) => '<a role="option" href="' + item.url + '">' + item.title + '</a>'),
-              ...collections.map((item) => '<a role="option" href="' + item.url + '">' + item.title + '</a>'),
-              ...articles.map((item) => '<a role="option" href="' + item.url + '">' + item.title + '</a>'),
-              ...pages.map((item) => '<a role="option" href="' + item.url + '">' + item.title + '</a>')
+              ...products.map((item) => ({ url: item.url, title: item.title })),
+              ...collections.map((item) => ({ url: item.url, title: item.title })),
+              ...articles.map((item) => ({ url: item.url, title: item.title })),
+              ...pages.map((item) => ({ url: item.url, title: item.title }))
             ].slice(0, 10);
-            results.innerHTML = items.length ? '<strong>Suggestions</strong>' + items.join('') : '';
-            results.hidden = !items.length;
+            results.replaceChildren();
+            if (items.length) {
+              const heading = document.createElement('strong');
+              heading.textContent = 'Suggestions';
+              results.appendChild(heading);
+              items.forEach((item) => {
+                const link = document.createElement('a');
+                link.href = item.url;
+                link.textContent = item.title;
+                link.setAttribute('role', 'option');
+                results.appendChild(link);
+              });
+            }            results.hidden = !items.length;
           })
           .catch(() => {});
       }, 180);
