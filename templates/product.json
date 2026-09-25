@@ -81,10 +81,15 @@
         "prop2",
         "prop3"
       ]
+    },
+    "complementary": {
+      "type": "complementary-products",
+      "settings": {}
     }
   },
   "order": [
     "main",
-    "value_props"
+    "value_props",
+    "complementary"
   ]
 }
