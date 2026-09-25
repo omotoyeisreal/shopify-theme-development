@@ -1,0 +1,72 @@
+<section class="section product">
+  <div class="container product__layout">
+    <div class="product__media">
+      {% if product.featured_image %}
+        <div class="product__featured-image">
+          {{ product.featured_image | image_url: width: 1200 | image_tag:
+            loading: 'eager',
+            widths: '600, 800, 1000, 1200',
+            sizes: '(min-width: 901px) 55vw, 100vw',
+            alt: product.featured_image.alt | escape
+          }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="product__info">
+      {% if product.vendor != blank %}
+        <p class="product__vendor">{{ product.vendor }}</p>
+      {% endif %}
+
+      <h1>{{ product.title }}</h1>
+
+      <div class="product__price">{{ product.selected_or_first_available_variant.price | money }}</div>
+
+      {% if product.description != blank %}
+        <div class="product__description rte">
+          {{ product.description }}
+        </div>
+      {% endif %}
+
+      {% form 'product', product, class: 'product-form' %}
+        {% unless product.has_only_default_variant %}
+          <div class="product-form__options">
+            {% for option in product.options_with_values %}
+              <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
+              <select
+                id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                name="options[{{ option.name | escape }}]"
+              >
+                {% for value in option.values %}
+                  <option value="{{ value | escape }}">{{ value }}</option>
+                {% endfor %}
+              </select>
+            {% endfor %}
+          </div>
+        {% endunless %}
+
+        <label for="Quantity-{{ section.id }}">Quantity</label>
+        <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1">
+
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+        <button class="button product-form__submit" type="submit" {% unless product.available %}disabled{% endunless %}>
+          {% if product.available %}Add to cart{% else %}Sold out{% endif %}
+        </button>
+      {% endform %}
+
+      <div class="product__trust">
+        <span>✓ Secure checkout</span>
+        <span>✓ Mobile-friendly shopping</span>
+        <span>✓ Easy product discovery</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main product",
+  "settings": []
+}
+{% endschema %}
