@@ -1,16 +1,18 @@
-<section class="section product">
+<section class="section product" data-product-root>
   <div class="container product__layout">
     <div class="product__media">
-      {% if product.featured_image %}
-        <div class="product__featured-image">
-          {{ product.featured_image | image_url: width: 1200 | image_tag:
-            loading: 'eager',
-            widths: '600, 800, 1000, 1200',
-            sizes: '(min-width: 901px) 55vw, 100vw',
-            alt: product.featured_image.alt | escape
-          }}
-        </div>
-      {% endif %}
+      <div class="product-gallery">
+        {% for image in product.images %}
+          <a class="product-gallery__item" href="{{ image | image_url: width: 1800 }}">
+            {{ image | image_url: width: 1200 | image_tag:
+              loading: forloop.first | default: false,
+              widths: '600, 800, 1000, 1200',
+              sizes: '(min-width: 901px) 55vw, 100vw',
+              alt: image.alt | default: product.title | escape
+            }}
+          </a>
+        {% endfor %}
+      </div>
     </div>
 
     <div class="product__info">
@@ -20,15 +22,15 @@
 
       <h1>{{ product.title }}</h1>
 
-      <div class="product__price">{{ product.selected_or_first_available_variant.price | money }}</div>
+      <div class="product__price" data-product-price>
+        {{ product.selected_or_first_available_variant.price | money }}
+      </div>
 
       {% if product.description != blank %}
-        <div class="product__description rte">
-          {{ product.description }}
-        </div>
+        <div class="product__description rte">{{ product.description }}</div>
       {% endif %}
 
-      {% form 'product', product, class: 'product-form' %}
+      {% form 'product', product, class: 'product-form', data-product-form: '' %}
         {% unless product.has_only_default_variant %}
           <div class="product-form__options">
             {% for option in product.options_with_values %}
@@ -36,6 +38,7 @@
               <select
                 id="Option-{{ section.id }}-{{ forloop.index0 }}"
                 name="options[{{ option.name | escape }}]"
+                data-option-index="{{ forloop.index0 }}"
               >
                 {% for value in option.values %}
                   <option value="{{ value | escape }}">{{ value }}</option>
@@ -48,21 +51,25 @@
         <label for="Quantity-{{ section.id }}">Quantity</label>
         <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1">
 
-        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
 
-        <button class="button product-form__submit" type="submit" {% unless product.available %}disabled{% endunless %}>
-          {% if product.available %}Add to cart{% else %}Sold out{% endif %}
+        <button class="button product-form__submit" type="submit" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %} data-add-to-cart>
+          {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
         </button>
       {% endform %}
 
       <div class="product__trust">
         <span>✓ Secure checkout</span>
         <span>✓ Mobile-friendly shopping</span>
-        <span>✓ Easy product discovery</span>
+        <span>✓ Clear product information</span>
       </div>
     </div>
   </div>
 </section>
+
+<script type="application/json" data-product-variants>
+  {{ product.variants | json }}
+</script>
 
 {% schema %}
 {
