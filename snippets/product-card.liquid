@@ -9,6 +9,7 @@
     <h3 class="product-card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
     <div class="product-card__price">
       {% if product.price_varies %}From {{ product.price_min | money }}{% else %}{{ product.price | money }}{% endif %}
+      {% if product.compare_at_price_max > product.price_max %}<span class="product-card__sale">Sale</span>{% endif %}
     </div>
     {% if product.selected_or_first_available_variant.unit_price_measurement %}
       <div class="product-card__unit-price">{{ product.selected_or_first_available_variant.unit_price | money }} / {% if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 %}{{ product.selected_or_first_available_variant.unit_price_measurement.reference_value }}{% endif %}{{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}</div>
