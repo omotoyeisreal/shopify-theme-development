@@ -1,0 +1,13 @@
+<section class="section">
+  <div class="container">
+    <h1>{{ 'general.404.title' | t | default: 'Page not found' }}</h1>
+    <p>{{ 'general.404.subtext' | t | default: 'The page you requested could not be found.' }}</p>
+    <a class="button" href="{{ routes.root_url }}">Return home</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 page"
+}
+{% endschema %}
