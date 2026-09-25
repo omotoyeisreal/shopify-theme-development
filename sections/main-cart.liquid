@@ -34,7 +34,7 @@
         {% endif %}
 
         <div class="cart-summary">
-          <strong>Total: {{ cart.total_price | money }}</strong>
+          <strong data-cart-subtotal>Total: {{ cart.total_price | money }}</strong>
           {% if cart.taxes_included %}<p>Taxes included.</p>{% else %}<p class="cart-tax-note">Taxes and shipping calculated at checkout.</p>{% endif %}
           {% if cart.items.first.selling_plan_allocation %}<p>Subscription purchase options are included in this order.</p>{% endif %}
           <div class="cart-summary__actions">
