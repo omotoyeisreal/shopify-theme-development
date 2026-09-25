@@ -17,6 +17,14 @@
                   {% for option in item.options_with_values %}<p>{{ option.name }}: {{ option.value }}</p>{% endfor %}
                 {% endunless %}
                 {% if item.selling_plan_allocation %}<p>Purchase option: {{ item.selling_plan_allocation.selling_plan.name }}</p>{% endif %}
+                {% if item.properties != empty %}
+                  <div class="cart-item__properties">
+                    {% for property in item.properties %}
+                      {% assign property_first_char = property.first | slice: 0 %}
+                      {% if property.last != blank and property_first_char != "_" %}<p>{{ property.first }}: {{ property.last }}</p>{% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
                 <p>Unit price: {{ item.unit_price | money }}{% if item.unit_price_measurement %} / {% if item.unit_price_measurement.reference_value != 1 %}{{ item.unit_price_measurement.reference_value }}{% endif %}{{ item.unit_price_measurement.reference_unit }}{% endif %}</p>
                 {% if item.original_price > item.final_price %}<p>Discounted from <s>{{ item.original_price | money }}</s></p>{% endif %}
                 <p>{{ item.final_line_price | money }}</p>
