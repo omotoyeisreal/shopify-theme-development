@@ -206,3 +206,7 @@ a { color: inherit; }
 @media (min-width: 901px) {
   .mobile-menu { display: none !important; }
 }
+
+.contact-form-wrapper { max-width: 720px; margin-top: 2rem; }
+.contact-form-wrapper form { display: grid; gap: .75rem; }
+.contact-form-wrapper input, .contact-form-wrapper textarea { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: .75rem; font: inherit; }
