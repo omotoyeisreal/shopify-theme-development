@@ -7,13 +7,13 @@
   --space-5: 3rem;
   --space-6: 4.5rem;
   --radius: 12px;
-  --text: {{ settings.text | default: '#171717' }};
-  --muted: {{ settings.muted | default: '#666666' }};
-  --surface: {{ settings.surface | default: '#f7f7f5' }};
-  --surface-text: {{ settings.surface_foreground | default: '#171717' }};
-  --border: {{ settings.muted | default: '#666666' }}55;
-  --brand: {{ settings.brand_primary | default: '#171717' }};
-  --brand-foreground: {{ settings.brand_primary_foreground | default: '#ffffff' }};
+  --text: #171717;
+  --muted: #666;
+  --surface: #f7f7f5;
+  --surface-text: #171717;
+  --border: #e6e6e2;
+  --brand: #171717;
+  --brand-foreground: #fff;
 }
 
 * { box-sizing: border-box; }
