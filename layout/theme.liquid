@@ -17,11 +17,13 @@
 
   {{ content_for_header }}
   {{ 'theme.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
 </head>
 
 <body class="template-{{ template.name | handle }}">
   <a class="skip-link" href="#MainContent">Skip to content</a>
 
+  {% section 'announcement-bar' %}
   {% section 'header' %}
 
   <main id="MainContent" role="main">
@@ -29,9 +31,5 @@
   </main>
 
   {% section 'footer' %}
-
-  <script>
-    document.documentElement.classList.add('js');
-  </script>
 </body>
 </html>
