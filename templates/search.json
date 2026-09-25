@@ -1,11 +1,9 @@
 {
   "sections": {
     "main": {
-      "type": "main-content",
+      "type": "main-search",
       "settings": {}
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["main"]
 }
