@@ -1,35 +1,21 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+<html lang="{{ request.locale.iso_code }}" data-currency="{{ shop.currency }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="{{ settings.brand_primary }}">
   <link rel="canonical" href="{{ canonical_url }}">
-
-  <title>
-    {{ page_title }}
-    {% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}
-  </title>
-
-  {% if page_description %}
-    <meta name="description" content="{{ page_description | escape }}">
-  {% endif %}
-
+  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
   {{ content_for_header }}
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
 </head>
-
 <body class="template-{{ template.name | handle }}">
   <a class="skip-link" href="#MainContent">Skip to content</a>
-
   {% section 'announcement-bar' %}
   {% section 'header' %}
-
-  <main id="MainContent" role="main">
-    {{ content_for_layout }}
-  </main>
-
+  <main id="MainContent" role="main">{{ content_for_layout }}</main>
   {% section 'footer' %}
 </body>
 </html>
