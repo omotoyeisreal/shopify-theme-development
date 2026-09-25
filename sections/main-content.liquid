@@ -1,27 +1,25 @@
-<section class="section main-content">
-  <div class="container rte">
-    {% case request.page_type %}
-      {% when 'page' %}
-        <h1>{{ page.title }}</h1>{{ page.content }}
-      {% when 'article' %}
-        <article><h1>{{ article.title }}</h1><p>{{ article.published_at | date: "%B %d, %Y" }}</p>{{ article.content }}</article>
-      {% when 'blog' %}
-        <h1>{{ blog.title }}</h1>
-        {% for article in blog.articles %}<article><h2><a href="{{ article.url }}">{{ article.title }}</a></h2><p>{{ article.excerpt_or_content | strip_html | truncate: 180 }}</p></article>{% endfor %}
-      {% when 'list-collections' %}
-        <h1>Collections</h1><div class="grid">{% for collection in collections %}<a href="{{ collection.url }}"><h2>{{ collection.title }}</h2></a>{% endfor %}</div>
-      {% when 'search' %}
-        <h1>Search</h1>
-        <form action="{{ routes.search_url }}" method="get" role="search"><label for="SearchInput">Search products</label><input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}"><button type="submit">Search</button></form>
-        {% if search.performed %}<p>{{ search.results_count }} results</p>{% for item in search.results %}<article><h2><a href="{{ item.url }}">{{ item.title }}</a></h2></article>{% endfor %}{% endif %}
-    {% endcase %}
+<section class="section search-page">
+  <div class="container">
+    <h1>Search</h1>
+    <form action="{{ routes.search_url }}" method="get" role="search">
+      <label for="SearchInput">Search products</label>
+      <input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" autocomplete="off" data-predictive-search>
+      <input type="hidden" name="options[prefix]" value="last">
+      <button class="button" type="submit">Search</button>
+    </form>
+    {% if search.performed %}
+      <p>{{ search.results_count }} results for “{{ search.terms }}”</p>
+      {% paginate search.results by 12 %}
+        <div class="product-grid">
+          {% for item in search.results %}
+            {% if item.object_type == 'product' %}{% render 'product-card', product: item %}{% else %}<article><h2><a href="{{ item.url }}">{{ item.title }}</a></h2></article>{% endif %}
+          {% else %}<p>No results found.</p>{% endfor %}
+        </div>
+        {% if paginate.pages > 1 %}<nav class="pagination" aria-label="Pagination">{% if paginate.previous %}<a href="{{ paginate.previous.url }}">Previous</a>{% endif %}<span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>{% if paginate.next %}<a href="{{ paginate.next.url }}">Next</a>{% endif %}</nav>{% endif %}
+      {% endpaginate %}
+    {% endif %}
   </div>
 </section>
-
 {% schema %}
-{
-  "name": "Main content",
-  "settings": [],
-  "presets": [{"name": "Main content"}]
-}
+{"name":"Search","settings":[]}
 {% endschema %}
