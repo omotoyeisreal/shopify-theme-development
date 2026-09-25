@@ -2,7 +2,46 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "vendor": {
+          "type": "vendor"
+        },
+        "title": {
+          "type": "title"
+        },
+        "price": {
+          "type": "price"
+        },
+        "options": {
+          "type": "options"
+        },
+        "quantity": {
+          "type": "quantity"
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true
+          }
+        },
+        "description": {
+          "type": "description"
+        },
+        "trust": {
+          "type": "trust"
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "options",
+        "quantity",
+        "buy_buttons",
+        "description",
+        "trust"
+      ]
     },
     "value_props": {
       "type": "value-props",
@@ -29,8 +68,15 @@
           }
         }
       },
-      "block_order": ["prop1", "prop2", "prop3"]
+      "block_order": [
+        "prop1",
+        "prop2",
+        "prop3"
+      ]
     }
   },
-  "order": ["main", "value_props"]
+  "order": [
+    "main",
+    "value_props"
+  ]
 }
