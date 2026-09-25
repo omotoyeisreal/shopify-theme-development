@@ -37,7 +37,7 @@
         <button type="submit">Search</button>
       </form>
       <a class="header__cart" href="{{ routes.cart_url }}">Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}</a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="MobileMenu-{{ section.id }}" data-menu-toggle><span class="visually-hidden">Toggle navigation</span>Menu</button>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="MobileMenu-{{ section.id }}" data-menu-toggle><span class="visually-hidden">Toggle navigation</span>Open menu</button>
     </div>
   </div>
   <nav id="MobileMenu-{{ section.id }}" class="mobile-menu" aria-label="Mobile navigation" data-mobile-menu>
@@ -100,5 +100,5 @@
   </script>
 </header>
 {% schema %}
-{"name":"Header","settings":[{"type":"link_list","id":"menu","label":"Navigation menu","default":"main-menu"},{"type":"link_list","id":"customer_account_menu","label":"Customer account menu","default":"customer-account-main-menu"}]}
+{"name":"Header","settings":[{"type":"link_list","id":"menu","label":"Navigation menu","default":"main-menu"},{"type":"link_list","id":"customer_account_menu","label":"Customer account menu","default":"main-menu"}]}
 {% endschema %}
