@@ -1,0 +1,59 @@
+<section class="section">
+  <div class="container">
+    <div class="section__header">
+      <h1>Your cart</h1>
+      {% if cart.item_count > 0 %}
+        <p>{{ cart.item_count }} item{% unless cart.item_count == 1 %}s{% endunless %} ready for checkout.</p>
+      {% endif %}
+    </div>
+
+    {% if cart.item_count > 0 %}
+      <form action="{{ routes.cart_url }}" method="post">
+        <div class="cart-list">
+          {% for item in cart.items %}
+            <article class="cart-item">
+              {% if item.image %}
+                <a href="{{ item.url }}">
+                  {{ item.image | image_url: width: 240 | image_tag:
+                    loading: 'lazy',
+                    widths: '120, 180, 240',
+                    sizes: '120px',
+                    alt: item.image.alt | escape
+                  }}
+                </a>
+              {% endif %}
+
+              <div class="cart-item__details">
+                <h2><a href="{{ item.url }}">{{ item.product.title }}</a></h2>
+                {% unless item.product.has_only_default_variant %}
+                  <p>{{ item.variant.title }}</p>
+                {% endunless %}
+                <p>{{ item.final_line_price | money }}</p>
+                <label for="Quantity-{{ item.key }}">Quantity</label>
+                <input id="Quantity-{{ item.key }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0">
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        <div class="cart-summary">
+          <strong>Total: {{ cart.total_price | money }}</strong>
+          <div class="cart-summary__actions">
+            <button class="button" type="submit" name="update">Update cart</button>
+            <button class="button" type="submit" name="checkout">Checkout</button>
+          </div>
+        </div>
+      </form>
+    {% else %}
+      <p>Your cart is currently empty.</p>
+      <a class="button" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main cart",
+  "settings": []
+}
+{% endschema %}
