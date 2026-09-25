@@ -20,6 +20,11 @@
         "type": "image_picker",
         "id": "social_share_image",
         "label": "Social media image"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
       }
     ]
   }
