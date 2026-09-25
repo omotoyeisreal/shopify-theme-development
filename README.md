@@ -289,19 +289,32 @@ This repository is intended to demonstrate my ability to:
 
 Potential future iterations include:
 
-- Product image galleries
 - AJAX cart interactions
-- Predictive search
-- Collection filtering and sorting
-- Related product recommendations
-- Product badges
-- More advanced variant handling
-- Accessibility refinements
+- Advanced variant handling
+- Additional accessibility refinements
 - Additional performance optimization
 - Shopify app integration examples
-- Automated theme linting/testing
+- Automated theme linting and testing
 
 ---
+
+
+## Frequently Asked Questions
+
+### Is this theme production-ready?
+This repository is a development and portfolio implementation. A Theme Store release should be used only after the current Shopify review, demo-store, performance, accessibility, documentation, and support requirements have been completed.
+
+### Does the theme support Online Store 2.0?
+Yes. The project uses JSON templates, modular sections, section groups, reusable snippets, and configurable blocks.
+
+### Does the theme support Shopify products with variants?
+Yes. The product template includes variant selection, swatches, dynamic pricing, availability, unit pricing, variant media, accelerated checkout, selling plans, and pickup availability.
+
+### Does the theme support app blocks?
+The main product and featured product sections support app blocks, and the main product section also provides a Custom Liquid block for compatible integrations.
+
+### Where can I report a theme issue?
+A public merchant support contact form will be provided with the Theme Store listing before launch.
 
 ## About the Developer
 
