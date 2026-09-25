@@ -1,0 +1,29 @@
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href="{{ routes.root_url }}">{{ shop.name }}</a>
+
+    <nav class="header__nav" aria-label="Main navigation">
+      {% for link in section.settings.menu.links %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {% endfor %}
+    </nav>
+
+    <a class="header__cart" href="{{ routes.cart_url }}">
+      Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}
+    </a>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigation menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}
