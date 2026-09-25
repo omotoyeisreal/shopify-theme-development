@@ -59,6 +59,20 @@
       {% endfor %}
 
       {% endform %}
+
+      {% if product.available %}
+        <div class="product-pickup"><strong>Pickup availability</strong><p>Check pickup options for your location at checkout.</p></div>
+      {% endif %}
+      <div class="product-recommendations" data-product-recommendations>
+        <h2>Related products</h2>
+        {% if product.collections.first.products_count > 1 %}
+          <div class="product-grid">
+            {% for related in product.collections.first.products limit: 4 %}
+              {% unless related.id == product.id %}{% render 'product-card', product: related %}{% endunless %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 </section>
