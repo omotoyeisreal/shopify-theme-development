@@ -72,7 +72,7 @@
                 <label for="RecipientMessage-{{ section.id }}">Message</label>
                 <textarea id="RecipientMessage-{{ section.id }}" name="properties[Message]" maxlength="200" rows="4">{{ form.message }}</textarea>
                 <label for="RecipientSendOn-{{ section.id }}">Send on</label>
-                <input id="RecipientSendOn-{{ section.id }}" type="date" name="properties[Send on]" value="{{ form.send_on }}" min="{{ 'now' | date: '%Y-%m-%d' }}">
+                <input id="RecipientSendOn-{{ section.id }}" type="date" name="properties[Send on]" value="{{ gift_card.send_on | date: '%Y-%m-%d' }}" min="{{ 'now' | date: '%Y-%m-%d' }}">
                 <input type="hidden" name="properties[__shopify_send_gift_card_to_recipient]" value="true">
                 <input type="hidden" name="properties[__shopify_offset]" value="0">
               </fieldset>
@@ -98,16 +98,15 @@
       {% if product.available %}
         <div class="product-pickup"><strong>Pickup availability</strong><p>Check pickup options for your location at checkout.</p></div>
       {% endif %}
-      <div class="product-recommendations" data-product-recommendations>
-        <h2>Related products</h2>
-        {% if product.collections.first.products_count > 1 %}
-          <div class="product-grid">
-            {% for related in product.collections.first.products limit: 4 %}
-              {% unless related.id == product.id %}{% render 'product-card', product: related %}{% endunless %}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
+      <section class="product-recommendations" data-product-recommendations
+        data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4&intent=related">
+        <div data-recommendations-content>
+          {% if recommendations.performed? and recommendations.products_count > 0 %}
+            <h2>You may also like</h2>
+            <div class="product-grid">{% for related in recommendations.products %}{% render 'product-card', product: related %}{% endfor %}</div>
+          {% endif %}
+        </div>
+      </section>
     </div>
   </div>
 </section>
