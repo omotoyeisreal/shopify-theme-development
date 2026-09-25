@@ -4,15 +4,33 @@
 
     <nav class="header__nav" aria-label="Main navigation">
       {% for link in section.settings.menu.links %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
+        <div class="header__nav-item">
+          <a href="{{ link.url }}">{{ link.title }}</a>
+          {% if link.links.size > 0 %}
+            <div class="header__submenu">
+              {% for child_link in link.links %}
+                <div class="header__submenu-item">
+                  <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                  {% if child_link.links.size > 0 %}
+                    <div class="header__submenu-nested">
+                      {% for grandchild_link in child_link.links %}
+                        <a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
       {% endfor %}
     </nav>
 
     <div class="header__actions">
-      <a class="header__cart" href="{{ routes.cart_url }}">
-        Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}
-      </a>
-
+      {% if shop.customer_accounts_enabled %}
+        <shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account>
+      {% endif %}
+      <a class="header__cart" href="{{ routes.cart_url }}">Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}</a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="MobileMenu-{{ section.id }}" data-menu-toggle>
         <span class="visually-hidden">Toggle navigation</span>
         Menu
@@ -22,8 +40,25 @@
 
   <nav id="MobileMenu-{{ section.id }}" class="mobile-menu" aria-label="Mobile navigation" data-mobile-menu hidden>
     <div class="container">
+      {% if shop.customer_accounts_enabled %}
+        <div class="mobile-menu__account"><shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account></div>
+      {% endif %}
       {% for link in section.settings.menu.links %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
+        <div class="mobile-menu__item">
+          <a href="{{ link.url }}">{{ link.title }}</a>
+          {% if link.links.size > 0 %}
+            <div class="mobile-menu__submenu">
+              {% for child_link in link.links %}
+                <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                {% if child_link.links.size > 0 %}
+                  <div class="mobile-menu__submenu-nested">
+                    {% for grandchild_link in child_link.links %}<a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>{% endfor %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
       {% endfor %}
     </div>
   </nav>
@@ -38,6 +73,12 @@
       "id": "menu",
       "label": "Navigation menu",
       "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "customer_account_menu",
+      "label": "Customer account menu",
+      "default": "customer-account-main-menu"
     }
   ]
 }
