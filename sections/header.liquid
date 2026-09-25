@@ -30,6 +30,12 @@
       {% if shop.customer_accounts_enabled %}
         <shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account>
       {% endif %}
+      <form class="header__search" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="visually-hidden" for="HeaderSearch-{{ section.id }}">Search</label>
+        <input id="HeaderSearch-{{ section.id }}" type="search" name="q" placeholder="Search" autocomplete="off" data-predictive-search>
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="submit">Search</button>
+      </form>
       <a class="header__cart" href="{{ routes.cart_url }}">Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}</a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="MobileMenu-{{ section.id }}" data-menu-toggle>
         <span class="visually-hidden">Toggle navigation</span>
