@@ -1,12 +1,10 @@
 {
   "current": {
-    "presets": {
-      "Flow MEDIA Default": {
-        "name": "Flow MEDIA Default",
-        "settings": {
-          "brand_primary": "#171717"
-        }
-      }
+    "brand_primary": "#171717"
+  },
+  "presets": {
+    "Flow MEDIA": {
+      "brand_primary": "#171717"
     }
   }
 }
