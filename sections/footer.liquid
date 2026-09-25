@@ -1,7 +1,37 @@
 <footer class="footer">
   <div class="container footer__inner">
-    <span>{{ shop.name }}</span>
-    <span>{{ section.settings.text }}</span>
+    <div>
+      <span>{{ shop.name }}</span>
+      <span>{{ section.settings.text }}</span>
+    </div>
+
+    {% if localization.available_countries.size > 1 or localization.available_languages.size > 1 %}
+      <div class="footer__localization">
+        {% form 'localization', class: 'localization-form' %}
+          {% if localization.available_countries.size > 1 %}
+            <label for="FooterCountry-{{ section.id }}">Country</label>
+            <select id="FooterCountry-{{ section.id }}" name="country_code" onchange="this.form.submit()">
+              {% for country in localization.available_countries %}
+                <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }})</option>
+              {% endfor %}
+            </select>
+          {% endif %}
+          {% if localization.available_languages.size > 1 %}
+            <label for="FooterLanguage-{{ section.id }}">Language</label>
+            <select id="FooterLanguage-{{ section.id }}" name="language_code" onchange="this.form.submit()">
+              {% for language in localization.available_languages %}
+                <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
+              {% endfor %}
+            </select>
+          {% endif %}
+          <noscript><button class="button" type="submit">Apply preferences</button></noscript>
+        {% endform %}
+      </div>
+    {% endif %}
+
+    <div class="footer__shop-follow">
+      {{ shop | login_button: action: 'follow' }}
+    </div>
   </div>
 </footer>
 
