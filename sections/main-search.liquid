@@ -1,0 +1,23 @@
+<section class="section search-page">
+  <div class="container">
+    <h1>Search</h1>
+    <form action="{{ routes.search_url }}" method="get" role="search">
+      <label for="SearchInput">Search products</label>
+      <input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" autocomplete="off" data-predictive-search>
+      <input type="hidden" name="options[prefix]" value="last">
+      <button class="button" type="submit">Search</button>
+    </form>
+    {% if search.performed %}
+      <p>{{ search.results_count }} results for “{{ search.terms }}”</p>
+      {% paginate search.results by 12 %}
+        <div class="product-grid">
+          {% for item in search.results %}{% if item.object_type == 'product' %}{% render 'product-card', product: item %}{% else %}<article><h2><a href="{{ item.url }}">{{ item.title }}</a></h2></article>{% endif %}{% else %}<p>No results found.</p>{% endfor %}
+        </div>
+        {% if paginate.pages > 1 %}<nav class="pagination" aria-label="Pagination">{% if paginate.previous %}<a href="{{ paginate.previous.url }}">Previous</a>{% endif %}<span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>{% if paginate.next %}<a href="{{ paginate.next.url }}">Next</a>{% endif %}</nav>{% endif %}
+      {% endpaginate %}
+    {% endif %}
+  </div>
+</section>
+{% schema %}
+{"name":"Search","settings":[],"presets":[{"name":"Search"}]}
+{% endschema %}
