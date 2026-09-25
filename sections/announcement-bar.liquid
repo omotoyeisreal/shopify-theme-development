@@ -1,0 +1,24 @@
+<div class="announcement-bar">
+  <div class="container">
+    {{ section.settings.text }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Message",
+      "default": "Free shipping on orders over $75"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar"
+    }
+  ]
+}
+{% endschema %}
