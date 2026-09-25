@@ -38,6 +38,8 @@
 
         <div class="cart-summary">
           <strong>Total: {{ cart.total_price | money }}</strong>
+          {% if cart.items.first.selling_plan_allocation %}<p>Subscription items are included in this order.</p>{% endif %}
+          {% if cart.total_price > 0 %}<p class="cart-tax-note">Taxes and shipping calculated at checkout.</p>{% endif %}
           <div class="cart-summary__actions">
             <button class="button" type="submit" name="update">Update cart</button>
             <button class="button" type="submit" name="checkout">Checkout</button>
