@@ -17,7 +17,7 @@
                   {% for option in item.options_with_values %}<p>{{ option.name }}: {{ option.value }}</p>{% endfor %}
                 {% endunless %}
                 {% if item.selling_plan_allocation %}<p>Purchase option: {{ item.selling_plan_allocation.selling_plan.name }}</p>{% endif %}
-                <p>Unit price: {{ item.final_price | money }}{% if item.unit_price_measurement %} · {{ item.unit_price | money }} / {% if item.unit_price_measurement.reference_value != 1 %}{{ item.unit_price_measurement.reference_value }}{% endif %}{{ item.unit_price_measurement.reference_unit }}{% endif %}</p>
+                <p>Unit price: {{ item.unit_price | money }}{% if item.unit_price_measurement %} / {% if item.unit_price_measurement.reference_value != 1 %}{{ item.unit_price_measurement.reference_value }}{% endif %}{{ item.unit_price_measurement.reference_unit }}{% endif %}</p>
                 {% if item.original_price > item.final_price %}<p>Discounted from <s>{{ item.original_price | money }}</s></p>{% endif %}
                 <p>{{ item.final_line_price | money }}</p>
                 <label for="Quantity-{{ item.key }}">Quantity</label>
