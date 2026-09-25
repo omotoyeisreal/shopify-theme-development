@@ -122,10 +122,34 @@
       .catch(() => { container.replaceChildren(); });
   };
 
+  const updateSellingPlanAvailability = (variant) => {
+    const sellingPlanInputs = [...productForm.querySelectorAll('input[name="selling_plan"]')];
+    if (!sellingPlanInputs.length) return;
+
+    const allocations = Array.isArray(variant.selling_plan_allocations) ? variant.selling_plan_allocations : [];
+    const availablePlanIds = new Set(allocations.map((allocation) => String(allocation.selling_plan_id)));
+    let selectedAvailable = false;
+
+    sellingPlanInputs.forEach((input) => {
+      const isOneTime = input.value === '';
+      const available = isOneTime ? !variant.requires_selling_plan : availablePlanIds.has(String(input.value));
+      input.disabled = !available;
+      const label = input.closest('label');
+      if (label) label.hidden = !available;
+      if (available && input.checked) selectedAvailable = true;
+    });
+
+    if (!selectedAvailable) {
+      const fallback = sellingPlanInputs.find((input) => !input.disabled);
+      if (fallback) fallback.checked = true;
+    }
+  };
+
   const updateVariant = () => {
     const variant = findVariant();
     if (!variant) return;
     variantIdInput.value = variant.id;
+    updateSellingPlanAvailability(variant);
     updatePickupAvailability(variant.id);
 
     if (priceElement) priceElement.textContent = formatMoney(variant.price);
