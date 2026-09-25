@@ -15,6 +15,11 @@
         "id": "brand_primary",
         "label": "Brand primary color",
         "default": "#171717"
+      },
+      {
+        "type": "image_picker",
+        "id": "social_share_image",
+        "label": "Social media image"
       }
     ]
   }
