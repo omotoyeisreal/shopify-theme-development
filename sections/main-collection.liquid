@@ -3,38 +3,40 @@
     <div class="section__header">
       <p>{{ collection.products_count }} products</p>
       <h1>{{ collection.title }}</h1>
-      {% if collection.description != blank %}
-        <div class="rte">{{ collection.description }}</div>
-      {% endif %}
+      {% if collection.description != blank %}<div class="rte">{{ collection.description }}</div>{% endif %}
     </div>
+
+    <form class="collection-filters" method="get">
+      <label for="SortBy">Sort by</label>
+      <select id="SortBy" name="sort_by" onchange="this.form.submit()">
+        {% for option in collection.sort_options %}<option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name }}</option>{% endfor %}
+      </select>
+      {% if collection.filters.size > 0 %}
+        {% for filter in collection.filters %}
+          <fieldset>
+            <legend>{{ filter.label }}</legend>
+            {% case filter.type %}
+              {% when 'list' %}
+                {% for value in filter.values %}
+                  <label><input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} onchange="this.form.submit()">{% if value.label %}{{ value.label }}{% endif %} ({{ value.count }})</label>
+                {% endfor %}
+              {% when 'price_range' %}
+                <label>{{ filter.min_value.label }} <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | default: 0 }}" min="0"></label>
+                <label>{{ filter.max_value.label }} <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | default: filter.range_max }}" min="0"></label>
+            {% endcase %}
+          </fieldset>
+        {% endfor %}
+      {% endif %}
+    </form>
 
     {% paginate collection.products by 12 %}
       <div class="product-grid">
-        {% for product in collection.products %}
-          {% render 'product-card', product: product %}
-        {% else %}
-          <p>No products found in this collection.</p>
-        {% endfor %}
+        {% for product in collection.products %}{% render 'product-card', product: product %}{% else %}<p>No products found in this collection.</p>{% endfor %}
       </div>
-
-      {% if paginate.pages > 1 %}
-        <nav class="pagination" aria-label="Pagination">
-          {% if paginate.previous %}
-            <a href="{{ paginate.previous.url }}">Previous</a>
-          {% endif %}
-          <span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
-          {% if paginate.next %}
-            <a href="{{ paginate.next.url }}">Next</a>
-          {% endif %}
-        </nav>
-      {% endif %}
+      {% if paginate.pages > 1 %}<nav class="pagination" aria-label="Pagination">{% if paginate.previous %}<a href="{{ paginate.previous.url }}">Previous</a>{% endif %}<span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>{% if paginate.next %}<a href="{{ paginate.next.url }}">Next</a>{% endif %}</nav>{% endif %}
     {% endpaginate %}
   </div>
 </section>
-
 {% schema %}
-{
-  "name": "Main collection",
-  "settings": []
-}
+{"name":"Main collection","settings":[]}
 {% endschema %}
