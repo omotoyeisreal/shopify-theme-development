@@ -15,6 +15,60 @@
     }));
   }
 
+  document.querySelectorAll('[data-product-recommendations][data-url]').forEach((container) => {
+    fetch(container.dataset.url)
+      .then((response) => response.text())
+      .then((html) => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = html;
+        const content = wrapper.querySelector('[data-recommendations-content]');
+        if (content && content.innerHTML.trim()) container.innerHTML = content.outerHTML;
+      })
+      .catch(() => {});
+  });
+
+  const predictiveInputs = document.querySelectorAll('[data-predictive-search]');
+  predictiveInputs.forEach((input) => {
+    const wrapper = input.closest('form');
+    let results;
+    let timer;
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      const query = input.value.trim();
+      if (query.length < 2) {
+        if (results) results.hidden = true;
+        return;
+      }
+      timer = setTimeout(() => {
+        const url = '/search/suggest.json?q=' + encodeURIComponent(query) + '&resources[type]=product,collection,article,page&resources[limit]=4';
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            const resources = data.resources?.results || {};
+            const products = resources.products || [];
+            const collections = resources.collections || [];
+            const articles = resources.articles || [];
+            const pages = resources.pages || [];
+            if (!results) {
+              results = document.createElement('div');
+              results.className = 'predictive-search';
+              results.setAttribute('role', 'listbox');
+              wrapper.appendChild(results);
+            }
+            const items = [
+              ...products.map((item) => '<a role="option" href="' + item.url + '">' + item.title + '</a>'),
+              ...collections.map((item) => '<a role="option" href="' + item.url + '">' + item.title + '</a>'),
+              ...articles.map((item) => '<a role="option" href="' + item.url + '">' + item.title + '</a>'),
+              ...pages.map((item) => '<a role="option" href="' + item.url + '">' + item.title + '</a>')
+            ].slice(0, 10);
+            results.innerHTML = items.length ? '<strong>Suggestions</strong>' + items.join('') : '';
+            results.hidden = !items.length;
+          })
+          .catch(() => {});
+      }, 180);
+    });
+  });
+
   const productForm = document.querySelector('[data-product-form]');
   const variantsElement = document.querySelector('[data-product-variants]');
   const variantIdInput = document.querySelector('[data-variant-id]');
