@@ -9,7 +9,7 @@
     "favicon": null
   },
   "presets": {
-    "Flow MEDIA": {
+    "Flow Commerce": {
       "brand_primary": "#171717",
       "brand_primary_foreground": "#ffffff",
       "surface": "#f7f7f5",
