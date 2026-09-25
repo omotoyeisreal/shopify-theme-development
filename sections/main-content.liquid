@@ -1,25 +1,54 @@
-<section class="section search-page">
+<section class="section main-content">
   <div class="container">
-    <h1>Search</h1>
-    <form action="{{ routes.search_url }}" method="get" role="search">
-      <label for="SearchInput">Search products</label>
-      <input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" autocomplete="off" data-predictive-search>
-      <input type="hidden" name="options[prefix]" value="last">
-      <button class="button" type="submit">Search</button>
-    </form>
-    {% if search.performed %}
-      <p>{{ search.results_count }} results for “{{ search.terms }}”</p>
-      {% paginate search.results by 12 %}
+    {% case request.page_type %}
+      {% when 'article' %}
+        <article>
+          <h1>{{ article.title }}</h1>
+          {% if article.image %}{{ article.image | image_url: width: 1200 | image_tag: loading: 'eager', widths: '600, 900, 1200', sizes: '100vw', alt: article.image.alt | escape }}{% endif %}
+          <div class="rte">{{ article.content }}</div>
+        </article>
+      {% when 'blog' %}
+        <h1>{{ blog.title }}</h1>
+        {% paginate blog.articles by 12 %}
+          <div class="product-grid">
+            {% for article in blog.articles %}
+              <article>
+                <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+                {% if article.excerpt != blank %}<div class="rte">{{ article.excerpt }}</div>{% endif %}
+              </article>
+            {% endfor %}
+          </div>
+          {% if paginate.pages > 1 %}<nav class="pagination" aria-label="Pagination">{% if paginate.previous %}<a href="{{ paginate.previous.url }}">Previous</a>{% endif %}<span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>{% if paginate.next %}<a href="{{ paginate.next.url }}">Next</a>{% endif %}</nav>{% endif %}
+        {% endpaginate %}
+      {% when 'list-collections' %}
+        <h1>Collections</h1>
         <div class="product-grid">
-          {% for item in search.results %}
-            {% if item.object_type == 'product' %}{% render 'product-card', product: item %}{% else %}<article><h2><a href="{{ item.url }}">{{ item.title }}</a></h2></article>{% endif %}
-          {% else %}<p>No results found.</p>{% endfor %}
+          {% for collection in collections %}
+            {% unless collection.handle == 'frontpage' %}
+              <article><h2><a href="{{ collection.url }}">{{ collection.title }}</a></h2>{% if collection.featured_image %}{{ collection.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(min-width: 901px) 25vw, 50vw', alt: collection.featured_image.alt | escape }}{% endif %}</article>
+            {% endunless %}
+          {% endfor %}
         </div>
-        {% if paginate.pages > 1 %}<nav class="pagination" aria-label="Pagination">{% if paginate.previous %}<a href="{{ paginate.previous.url }}">Previous</a>{% endif %}<span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>{% if paginate.next %}<a href="{{ paginate.next.url }}">Next</a>{% endif %}</nav>{% endif %}
-      {% endpaginate %}
-    {% endif %}
+      {% else %}
+        <h1>{{ page.title }}</h1>
+        {% if request.page_type == 'page.contact' %}
+          {% form 'contact' %}
+            {{ form.errors | default_errors }}
+            <label for="ContactName">Name</label>
+            <input id="ContactName" type="text" name="contact[name]" required>
+            <label for="ContactEmail">Email</label>
+            <input id="ContactEmail" type="email" name="contact[email]" required>
+            <label for="ContactMessage">Message</label>
+            <textarea id="ContactMessage" name="contact[body]" rows="6" required></textarea>
+            <button class="button" type="submit">Send message</button>
+          {% endform %}
+        {% else %}
+          <div class="rte">{{ page.content }}</div>
+        {% endif %}
+    {% endcase %}
   </div>
 </section>
+
 {% schema %}
-{"name":"Search","settings":[]}
+{"name":"Main content","settings":[],"presets":[{"name":"Main content"}]}
 {% endschema %}
