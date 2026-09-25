@@ -61,6 +61,22 @@
                 {% endfor %}
               </fieldset>
             {% endif %}
+          {% when 'gift_card_recipient' %}
+            {% if product.gift_card? %}
+              <fieldset class="gift-card-recipient" {{ block.shopify_attributes }}>
+                <legend>Gift card recipient</legend>
+                <label for="RecipientEmail-{{ section.id }}">Recipient email</label>
+                <input id="RecipientEmail-{{ section.id }}" type="email" name="properties[Recipient email]" required>
+                <label for="RecipientName-{{ section.id }}">Recipient name</label>
+                <input id="RecipientName-{{ section.id }}" type="text" name="properties[Recipient name]" maxlength="255">
+                <label for="RecipientMessage-{{ section.id }}">Message</label>
+                <textarea id="RecipientMessage-{{ section.id }}" name="properties[Message]" maxlength="200" rows="4"></textarea>
+                <label for="RecipientSendOn-{{ section.id }}">Send on</label>
+                <input id="RecipientSendOn-{{ section.id }}" type="date" name="properties[Send on]" min="{{ 'now' | date: '%Y-%m-%d' }}">
+                <input type="hidden" name="properties[__shopify_send_gift_card_to_recipient]" value="true">
+                <input type="hidden" name="properties[__shopify_offset]" value="0">
+              </fieldset>
+            {% endif %}
           {% when 'buy_buttons' %}
             <div {{ block.shopify_attributes }}>
               <button class="button product-form__submit" type="submit" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %} data-add-to-cart>
@@ -110,11 +126,12 @@
     {"type":"options","name":"Variant picker","limit":1},
     {"type":"quantity","name":"Quantity","limit":1},
     {"type":"selling_plans","name":"Selling plans","limit":1},
+    {"type":"gift_card_recipient","name":"Gift card recipient","limit":1},
     {"type":"buy_buttons","name":"Buy buttons","limit":1,"settings":[{"type":"checkbox","id":"show_dynamic_checkout","label":"Show accelerated checkout buttons","default":true}]},
     {"type":"trust","name":"Trust message","limit":1},
     {"type":"custom_liquid","name":"Custom Liquid","settings":[{"type":"liquid","id":"liquid","label":"Liquid code"}]},
     {"type":"@app"}
   ],
-  "presets":[{"name":"Main product","blocks":[{"type":"vendor"},{"type":"title"},{"type":"price"},{"type":"options"},{"type":"quantity"},{"type":"selling_plans"},{"type":"buy_buttons"},{"type":"description"},{"type":"trust"}]}]
+  "presets":[{"name":"Main product","blocks":[{"type":"vendor"},{"type":"title"},{"type":"price"},{"type":"options"},{"type":"quantity"},{"type":"selling_plans"},{"type":"gift_card_recipient"},{"type":"buy_buttons"},{"type":"description"},{"type":"trust"}]}]
 }
 {% endschema %}
