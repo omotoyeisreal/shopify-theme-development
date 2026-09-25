@@ -1,7 +1,10 @@
 <section class="section product-recommendations complementary-products" data-product-recommendations>
   <div class="container">
     <div data-recommendations-content>
-      <h2>Pair it with</h2>
+      {% if recommendations.performed? and recommendations.products_count > 0 %}
+        <h2>Pair it with</h2>
+        <div class="product-grid">{% for recommended in recommendations.products %}{% render 'product-card', product: recommended %}{% endfor %}</div>
+      {% endif %}
     </div>
   </div>
 </section>
