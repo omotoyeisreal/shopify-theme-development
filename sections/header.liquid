@@ -4,14 +4,20 @@
     <nav class="header__nav" aria-label="Main navigation">
       {% for link in section.settings.menu.links %}
         <div class="header__nav-item">
-          <a href="{{ link.url }}">{{ link.title }}</a>
+          <a href="{{ link.url }}"{% if link.links.size > 0 %} aria-describedby="DesktopSubmenuToggle-{{ section.id }}-{{ forloop.index }}"{% endif %}>{{ link.title }}</a>
           {% if link.links.size > 0 %}
-            <div class="header__submenu">
+            <button class="header__submenu-toggle" type="button" aria-expanded="false" aria-controls="DesktopSubmenu-{{ section.id }}-{{ forloop.index }}">
+              <span class="visually-hidden">Toggle {{ link.title }} navigation</span>
+            </button>
+            <div id="DesktopSubmenu-{{ section.id }}-{{ forloop.index }}" class="header__submenu" hidden>
               {% for child_link in link.links %}
                 <div class="header__submenu-item">
-                  <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                  <a href="{{ child_link.url }}"{% if child_link.links.size > 0 %} aria-describedby="DesktopNestedToggle-{{ section.id }}-{{ forloop.index }}-{{ forloop.parentloop.index }}"{% endif %}>{{ child_link.title }}</a>
                   {% if child_link.links.size > 0 %}
-                    <div class="header__submenu-nested">
+                    <button class="header__nested-toggle" type="button" aria-expanded="false" aria-controls="DesktopNested-{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}">
+                      <span class="visually-hidden">Toggle {{ child_link.title }} navigation</span>
+                    </button>
+                    <div id="DesktopNested-{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}" class="header__submenu-nested" hidden>
                       {% for grandchild_link in child_link.links %}<a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>{% endfor %}
                     </div>
                   {% endif %}
@@ -52,6 +58,60 @@
       {% endfor %}
     </div>
   </nav>
+  <script>
+    (() => {
+      const closeAll = (except) => {
+        document.querySelectorAll('.header__submenu-toggle[aria-expanded="true"]').forEach((button) => {
+          if (button === except) return;
+          button.setAttribute('aria-expanded', 'false');
+          const menu = document.getElementById(button.getAttribute('aria-controls'));
+          if (menu) menu.hidden = true;
+        });
+        document.querySelectorAll('.header__nested-toggle[aria-expanded="true"]').forEach((button) => {
+          button.setAttribute('aria-expanded', 'false');
+          const menu = document.getElementById(button.getAttribute('aria-controls'));
+          if (menu) menu.hidden = true;
+        });
+      };
+
+      document.querySelectorAll('.header__submenu-toggle').forEach((button) => {
+        button.addEventListener('click', () => {
+          const expanded = button.getAttribute('aria-expanded') === 'true';
+          closeAll(expanded ? null : button);
+          button.setAttribute('aria-expanded', String(!expanded));
+          const menu = document.getElementById(button.getAttribute('aria-controls'));
+          if (menu) menu.hidden = expanded;
+        });
+
+        button.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            button.setAttribute('aria-expanded', 'false');
+            const menu = document.getElementById(button.getAttribute('aria-controls'));
+            if (menu) menu.hidden = true;
+            button.focus();
+          }
+        });
+      });
+
+      document.querySelectorAll('.header__nested-toggle').forEach((button) => {
+        button.addEventListener('click', () => {
+          const expanded = button.getAttribute('aria-expanded') === 'true';
+          button.setAttribute('aria-expanded', String(!expanded));
+          const menu = document.getElementById(button.getAttribute('aria-controls'));
+          if (menu) menu.hidden = expanded;
+        });
+
+        button.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            button.setAttribute('aria-expanded', 'false');
+            const menu = document.getElementById(button.getAttribute('aria-controls'));
+            if (menu) menu.hidden = true;
+            button.focus();
+          }
+        });
+      });
+    })();
+  </script>
 </header>
 {% schema %}
 {"name":"Header","settings":[{"type":"link_list","id":"menu","label":"Navigation menu","default":"main-menu"},{"type":"link_list","id":"customer_account_menu","label":"Customer account menu","default":"customer-account-main-menu"}]}
