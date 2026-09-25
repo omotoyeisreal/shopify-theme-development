@@ -4,7 +4,7 @@
     <nav class="header__nav" aria-label="Main navigation">
       {% for link in section.settings.menu.links %}
         <div class="header__nav-item">
-          <a href="{{ link.url }}"{% if link.links.size > 0 %} aria-describedby="DesktopSubmenuToggle-{{ section.id }}-{{ forloop.index }}"{% endif %}>{{ link.title }}</a>
+          <a href="{{ link.url }}">{{ link.title }}</a>
           {% if link.links.size > 0 %}
             <button class="header__submenu-toggle" type="button" aria-expanded="false" aria-controls="DesktopSubmenu-{{ section.id }}-{{ forloop.index }}">
               <span class="visually-hidden">Toggle {{ link.title }} navigation</span>
@@ -12,7 +12,7 @@
             <div id="DesktopSubmenu-{{ section.id }}-{{ forloop.index }}" class="header__submenu" hidden>
               {% for child_link in link.links %}
                 <div class="header__submenu-item">
-                  <a href="{{ child_link.url }}"{% if child_link.links.size > 0 %} aria-describedby="DesktopNestedToggle-{{ section.id }}-{{ forloop.index }}-{{ forloop.parentloop.index }}"{% endif %}>{{ child_link.title }}</a>
+                  <a href="{{ child_link.url }}">{{ child_link.title }}</a>
                   {% if child_link.links.size > 0 %}
                     <button class="header__nested-toggle" type="button" aria-expanded="false" aria-controls="DesktopNested-{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}">
                       <span class="visually-hidden">Toggle {{ child_link.title }} navigation</span>
