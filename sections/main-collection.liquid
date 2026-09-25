@@ -3,6 +3,7 @@
     <div class="section__header">
       <p>{{ collection.products_count }} products</p>
       <h1>{{ collection.title }}</h1>
+      {% if collection.featured_image %}{{ collection.featured_image | image_url: width: 1400 | image_tag: loading: 'eager', widths: '700, 1000, 1400', sizes: '100vw', alt: collection.featured_image.alt | default: collection.title | escape }}{% endif %}
       {% if collection.description != blank %}<div class="rte">{{ collection.description }}</div>{% endif %}
     </div>
 
