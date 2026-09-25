@@ -65,11 +65,13 @@
             {% if product.selling_plan_groups.size > 0 %}
               <fieldset class="product-form__selling-plans" {{ block.shopify_attributes }}>
                 <legend>Purchase options</legend>
-                {% unless product.requires_selling_plan %}<label><input type="radio" name="selling_plan" value="" checked> One-time purchase</label>{% endunless %}
+                {% unless product.requires_selling_plan %}
+          <label for="SellingPlanOneTime-{{ section.id }}"><input id="SellingPlanOneTime-{{ section.id }}" type="radio" name="selling_plan" value="" checked> One-time purchase</label>
+        {% endunless %}
                 {% for group in product.selling_plan_groups %}
                   <p>{{ group.name }}</p>
                   {% for plan in group.selling_plans %}
-                    <label><input type="radio" name="selling_plan" value="{{ plan.id }}" {% if product.requires_selling_plan and forloop.first and forloop.parentloop.first %}checked{% endif %}> {{ plan.name }}</label>
+                    <label for="SellingPlan-{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}"><input id="SellingPlan-{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}" type="radio" name="selling_plan" value="{{ plan.id }}" {% if product.requires_selling_plan and forloop.first and forloop.parentloop.first %}checked{% endif %}> {{ plan.name }}</label>
                   {% endfor %}
                 {% endfor %}
               </fieldset>
