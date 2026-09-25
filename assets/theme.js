@@ -106,10 +106,26 @@
     return variants.find((variant) => variant.options.every((option, index) => option === selected[index]));
   };
 
+  const updatePickupAvailability = (variantId) => {
+    const container = document.querySelector('[data-store-availability-container]');
+    if (!container || !variantId || !window.Shopify?.routes?.root) return;
+    const url = window.Shopify.routes.root + 'variants/' + variantId + '/?section_id=pickup-availability';
+    fetch(url)
+      .then((response) => response.text())
+      .then((html) => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const section = doc.querySelector('.shopify-section');
+        container.replaceChildren();
+        if (section && section.textContent.trim()) container.appendChild(section);
+      })
+      .catch(() => { container.replaceChildren(); });
+  };
+
   const updateVariant = () => {
     const variant = findVariant();
     if (!variant) return;
     variantIdInput.value = variant.id;
+    updatePickupAvailability(variant.id);
 
     if (priceElement) priceElement.textContent = formatMoney(variant.price);
     if (compareElement) compareElement.innerHTML = variant.compare_at_price > variant.price ? '<s>' + formatMoney(variant.compare_at_price) + '</s>' : '';
