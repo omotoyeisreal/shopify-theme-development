@@ -35,12 +35,18 @@
           {% if block.settings.url != blank %}
             <a href="{{ block.settings.url }}" aria-label="{{ block.settings.platform }}" {{ block.shopify_attributes }}>
               {% case block.settings.platform %}
-                {% when 'Facebook' %}f
-                {% when 'Instagram' %}◎
-                {% when 'X' %}𝕏
-                {% when 'YouTube' %}▶
-                {% when 'TikTok' %}♪
-                {% when 'Pinterest' %}P
+                {% when 'Facebook' %}
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#1877F2" d="M13.5 21v-7h2.35l.35-2.73H13.5V9.53c0-.79.22-1.33 1.37-1.33h1.47V5.76c-.25-.03-1.1-.1-2.1-.1-2.08 0-3.5 1.27-3.5 3.61v2h-2.35V14h2.35v7h2.76Z"/></svg>
+                {% when 'Instagram' %}
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#E4405F" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="#FCAF45" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="#833AB4"/></svg>
+                {% when 'X' %}
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#000000" d="M18.9 2H22l-6.77 7.74L23 22h-6.09l-4.77-6.22L6.7 22H3.59l7.24-8.28L3 2h6.25l4.31 5.7L18.9 2Zm-1.07 17.87h1.69L8.24 4h-1.8l11.39 15.87Z"/></svg>
+                {% when 'YouTube' %}
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.12C19.54 3.55 12 3.55 12 3.55s-7.54 0-9.4.53A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.12c1.86.53 9.4.53 9.4.53s7.54 0 9.4-.53a3 3 0 0 0 2.1-2.12A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.55 15.5v-7l6.1 3.5-6.1 3.5Z"/></svg>
+                {% when 'TikTok' %}
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#25F4EE" d="M15.2 3c.25 2.13 1.45 3.42 3.55 3.55v3.03a8.6 8.6 0 0 1-3.54-1.02v6.55A5.9 5.9 0 1 1 10.1 9.2v3.12a2.85 2.85 0 1 0 2.1 2.76V3h3Z"/><path fill="#FE2C55" d="M14.8 3h1.05c.22 1.64 1.15 2.79 2.9 3.35v1.6a8.5 8.5 0 0 1-2.9-1.04v6.2a5.9 5.9 0 0 1-8.6 5.24 5.9 5.9 0 0 0 10.65-3.52V8.3c.88.42 1.85.67 2.85.67V6.6C17.15 6.35 15.45 5.05 14.8 3Z" opacity=".75"/></svg>
+                {% when 'Pinterest' %}
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#E60023" d="M12 2a10 10 0 0 0-3.64 19.31c-.09-1.64-.02-3.62.41-5.5l1.07-4.52s-.27-.54-.27-1.34c0-1.26.73-2.2 1.64-2.2.77 0 1.14.58 1.14 1.28 0 .78-.5 1.94-.76 3.02-.22.9.45 1.64 1.33 1.64 1.6 0 2.68-1.68 2.68-3.67 0-1.51-1.02-2.64-2.88-2.64-2.1 0-3.41 1.57-3.41 3.33 0 .61.18 1.04.46 1.41.13.15.15.21.1.38l-.17.66c-.05.2-.2.27-.37.2-1.37-.56-2.01-2.06-2.01-3.75 0-2.78 2.34-6.12 6.98-6.12 3.73 0 6.18 2.7 6.18 5.59 0 3.83-2.13 6.7-5.27 6.7-1.06 0-2.05-.57-2.39-1.22l-.65 2.6c-.23.96-.68 1.92-1.1 2.67.99.29 2.04.45 3.13.45A10 10 0 0 0 12 2Z"/></svg>
               {% endcase %}
             </a>
           {% endif %}
