@@ -190,3 +190,19 @@ a { color: inherit; }
 .header__search input { width: 150px; min-height: 38px; border: 1px solid var(--border); border-radius: 8px; padding: .5rem; }
 .predictive-search { position: absolute; top: calc(100% + .35rem); left: 0; right: 0; min-width: 280px; padding: .75rem; background: #fff; border: 1px solid var(--border); box-shadow: 0 12px 30px rgba(0,0,0,.08); z-index: 50; display: grid; gap: .5rem; }
 .predictive-search a { text-decoration: none; }
+
+.rte h1,.rte h2,.rte h3,.rte h4,.rte h5,.rte h6 { margin: 1.5rem 0 .75rem; line-height: 1.2; }
+.rte p,.rte ul,.rte ol,.rte blockquote { margin: 0 0 1rem; }
+.rte ul,.rte ol { padding-left: 1.5rem; }
+.rte blockquote { padding-left: 1rem; border-left: 3px solid var(--border); }
+.rte img { max-width: 100%; height: auto; }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+@media (max-width: 900px) {
+  .header__nav { display: none; }
+  .header__actions { margin-left: auto; }
+  .header__search input { width: 110px; }
+  .header__search button { display: none; }
+}
+@media (min-width: 901px) {
+  .mobile-menu { display: none !important; }
+}
