@@ -6,7 +6,7 @@
           <div class="product-gallery__item" data-media-id="{{ media.id }}">
             {% case media.media_type %}
               {% when 'image' %}
-                {{ media | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 800, 1000, 1200', sizes: '(min-width: 901px) 55vw, 100vw', alt: media.alt | default: product.title | escape }}
+                {{ media | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600, 800, 1000, 1200', sizes: '(min-width: 901px) 55vw, 100vw', alt: media.alt | default: product.title | escape }}
               {% else %}
                 {{ media | media_tag: image_size: '1200x', controls: true }}
             {% endcase %}
