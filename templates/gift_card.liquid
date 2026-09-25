@@ -1,0 +1,1 @@
+<!doctype html><html><head>{{ content_for_header }}{{ 'theme.css' | asset_url | stylesheet_tag }}</head><body><main class="section"><div class="container"><h1>{{ gift_card.initial_value | money }}</h1><p>Gift card for {{ shop.name }}</p>{% if gift_card.pass_url %}<p><a href="{{ gift_card.pass_url }}">Add to Apple Wallet</a></p>{% endif %}</div></main></body></html>
