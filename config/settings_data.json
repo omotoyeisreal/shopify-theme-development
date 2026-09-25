@@ -1,10 +1,12 @@
 {
   "current": {
-    "brand_primary": "#171717"
+    "brand_primary": "#171717",
+    "favicon": null
   },
   "presets": {
     "Flow MEDIA": {
-      "brand_primary": "#171717"
+      "brand_primary": "#171717",
+      "favicon": null
     }
   }
 }
