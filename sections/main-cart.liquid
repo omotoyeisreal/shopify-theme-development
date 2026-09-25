@@ -2,32 +2,21 @@
   <div class="container">
     <div class="section__header">
       <h1>Your cart</h1>
-      {% if cart.item_count > 0 %}
-        <p>{{ cart.item_count }} item{% unless cart.item_count == 1 %}s{% endunless %} ready for checkout.</p>
-      {% endif %}
+      {% if cart.item_count > 0 %}<p>{{ cart.item_count }} item{% unless cart.item_count == 1 %}s{% endunless %} ready for checkout.</p>{% endif %}
     </div>
 
     {% if cart.item_count > 0 %}
-      <form action="{{ routes.cart_url }}" method="post">
+      {% form 'cart', cart %}
         <div class="cart-list">
           {% for item in cart.items %}
             <article class="cart-item">
-              {% if item.image %}
-                <a href="{{ item.url }}">
-                  {{ item.image | image_url: width: 240 | image_tag:
-                    loading: 'lazy',
-                    widths: '120, 180, 240',
-                    sizes: '120px',
-                    alt: item.image.alt | escape
-                  }}
-                </a>
-              {% endif %}
-
+              {% if item.image %}<a href="{{ item.url }}">{{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120, 180, 240', sizes: '120px', alt: item.image.alt | escape }}</a>{% endif %}
               <div class="cart-item__details">
                 <h2><a href="{{ item.url }}">{{ item.product.title }}</a></h2>
-                {% unless item.product.has_only_default_variant %}
-                  <p>{{ item.variant.title }}</p>
-                {% endunless %}
+                {% unless item.product.has_only_default_variant %}<p>{{ item.variant.title }}</p>{% endunless %}
+                {% if item.selling_plan_allocation %}<p>Purchase option: {{ item.selling_plan_allocation.selling_plan.name }}</p>{% endif %}
+                <p>Unit price: {{ item.final_price | money }}{% if item.unit_price_measurement %} · {{ item.unit_price | money }} / {% if item.unit_price_measurement.reference_value != 1 %}{{ item.unit_price_measurement.reference_value }}{% endif %}{{ item.unit_price_measurement.reference_unit }}{% endif %}</p>
+                {% if item.original_price > item.final_price %}<p>Discounted from <s>{{ item.original_price | money }}</s></p>{% endif %}
                 <p>{{ item.final_line_price | money }}</p>
                 <label for="Quantity-{{ item.key }}">Quantity</label>
                 <input id="Quantity-{{ item.key }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0">
@@ -36,16 +25,24 @@
           {% endfor %}
         </div>
 
+        {% if cart.cart_level_discount_applications.size > 0 %}
+          <div class="cart-discounts">
+            {% for discount in cart.cart_level_discount_applications %}<p>{{ discount.title }}: -{{ discount.total_allocated_amount | money }}</p>{% endfor %}
+          </div>
+        {% endif %}
+
         <div class="cart-summary">
           <strong>Total: {{ cart.total_price | money }}</strong>
-          {% if cart.items.first.selling_plan_allocation %}<p>Subscription items are included in this order.</p>{% endif %}
-          {% if cart.total_price > 0 %}<p class="cart-tax-note">Taxes and shipping calculated at checkout.</p>{% endif %}
+          {% if cart.taxes_included %}<p>Taxes included.</p>{% else %}<p class="cart-tax-note">Taxes and shipping calculated at checkout.</p>{% endif %}
+          {% if cart.items.first.selling_plan_allocation %}<p>Subscription purchase options are included in this order.</p>{% endif %}
           <div class="cart-summary__actions">
             <button class="button" type="submit" name="update">Update cart</button>
             <button class="button" type="submit" name="checkout">Checkout</button>
           </div>
+          {% if additional_checkout_buttons %}<div class="additional-checkout-buttons--vertical">{{ content_for_additional_checkout_buttons }}</div>{% endif %}
+          {{ form | payment_terms }}
         </div>
-      </form>
+      {% endform %}
     {% else %}
       <p>Your cart is currently empty.</p>
       <a class="button" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
@@ -54,8 +51,5 @@
 </section>
 
 {% schema %}
-{
-  "name": "Main cart",
-  "settings": []
-}
+{"name":"Main cart","settings":[]}
 {% endschema %}
