@@ -29,6 +29,25 @@
       </div>
     {% endif %}
 
+    {% if section.blocks.size > 0 %}
+      <div class="footer__social" aria-label="Social media">
+        {% for block in section.blocks %}
+          {% if block.settings.url != blank %}
+            <a href="{{ block.settings.url }}" aria-label="{{ block.settings.platform }}" {{ block.shopify_attributes }}>
+              {% case block.settings.platform %}
+                {% when 'Facebook' %}f
+                {% when 'Instagram' %}◎
+                {% when 'X' %}𝕏
+                {% when 'YouTube' %}▶
+                {% when 'TikTok' %}♪
+                {% when 'Pinterest' %}P
+              {% endcase %}
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <div class="footer__shop-follow">
       {{ shop | login_button: action: 'follow' }}
     </div>
@@ -44,6 +63,40 @@
       "id": "text",
       "label": "Footer text",
       "default": "Built with Shopify Online Store 2.0"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "social",
+      "name": "Social link",
+      "settings": [
+        {
+          "type": "select",
+          "id": "platform",
+          "label": "Social media icon",
+          "options": [
+            {"value":"Facebook","label":"Facebook"},
+            {"value":"Instagram","label":"Instagram"},
+            {"value":"X","label":"X"},
+            {"value":"YouTube","label":"YouTube"},
+            {"value":"TikTok","label":"TikTok"},
+            {"value":"Pinterest","label":"Pinterest"}
+          ],
+          "default": "Instagram"
+        },
+        {"type":"url","id":"url","label":"Social media link"}
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        {"type":"social","settings":{"platform":"Instagram"}},
+        {"type":"social","settings":{"platform":"Facebook"}},
+        {"type":"social","settings":{"platform":"YouTube"}}
+      ]
     }
   ]
 }
