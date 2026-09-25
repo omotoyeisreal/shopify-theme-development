@@ -41,7 +41,21 @@
   "settings": [
     {"type":"product","id":"product","label":"Product"}
   ],
-  "blocks": [{"type":"@app"}],
+  "blocks": [
+    {
+      "type": "custom_liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "liquid",
+          "label": "Liquid code",
+          "default": "<p>Add custom Liquid content here.</p>"
+        }
+      ]
+    },
+    {"type":"@app"}
+  ],
   "presets": [{"name":"Featured product"}]
 }
 {% endschema %}
