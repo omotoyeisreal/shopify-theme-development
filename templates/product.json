@@ -33,6 +33,9 @@
         },
         "selling_plans": {
           "type": "selling_plans"
+        },
+        "gift_card_recipient": {
+          "type": "gift_card_recipient"
         }
       },
       "block_order": [
@@ -42,6 +45,7 @@
         "options",
         "quantity",
         "selling_plans",
+        "gift_card_recipient",
         "buy_buttons",
         "description",
         "trust"
