@@ -1,0 +1,21 @@
+{% assign product = product %}
+
+<article class="product-card">
+  <a class="product-card__media" href="{{ product.url }}">
+    {% if product.featured_image %}
+      {{ product.featured_image | image_url: width: 800 | image_tag:
+        loading: 'lazy',
+        widths: '360, 540, 720, 800',
+        sizes: '(min-width: 901px) 25vw, 50vw',
+        alt: product.featured_image.alt | escape
+      }}
+    {% endif %}
+  </a>
+
+  <div class="product-card__info">
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+    <div class="product-card__price">{{ product.price | money }}</div>
+  </div>
+</article>
