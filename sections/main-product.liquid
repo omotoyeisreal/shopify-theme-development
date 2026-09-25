@@ -108,9 +108,7 @@
       {% endfor %}
       {% endform %}
 
-      {% if product.available %}
-        <div class="product-pickup"><strong>Pickup availability</strong><p>Check pickup options for your location at checkout.</p></div>
-      {% endif %}
+      <div class="product-pickup-container" data-store-availability-container data-product-title="{{ product.title | escape }}" data-base-url="{{ shop.url }}{{ routes.root_url }}"></div>
       <section class="product-recommendations" data-product-recommendations
         data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4&intent=related">
         <div data-recommendations-content>
