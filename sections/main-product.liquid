@@ -42,6 +42,20 @@
                       <option value="{{ value | escape }}" {% if value == product.selected_or_first_available_variant.options[forloop.index0] %}selected{% endif %}>{{ value }}</option>
                     {% endfor %}
                   </select>
+                  <div class="product-option-swatches" role="list" aria-label="{{ option.name }}">
+                    {% for value in option.values %}
+                      {% if value.swatch %}
+                        <button type="button" class="product-swatch" data-swatch-option="{{ option.name | escape }}" data-swatch-value="{{ value | escape }}" role="listitem" aria-label="{{ value | escape }}" title="{{ value | escape }}">
+                          {% if value.swatch.image %}
+                            {{ value.swatch.image | image_url: width: 80 | image_tag: loading: 'lazy', width: 40, height: 40, alt: value | escape }}
+                          {% elsif value.swatch.color %}
+                            <span class="product-swatch__color" style="background: {{ value.swatch.color }};"></span>
+                          {% endif %}
+                        </button>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  </select>
                 {% endfor %}
               </div>
             {% endunless %}
