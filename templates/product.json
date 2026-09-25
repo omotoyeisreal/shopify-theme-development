@@ -1,0 +1,36 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {}
+    },
+    "value_props": {
+      "type": "value-props",
+      "blocks": {
+        "prop1": {
+          "type": "prop",
+          "settings": {
+            "heading": "Secure checkout",
+            "text": "Shop with confidence"
+          }
+        },
+        "prop2": {
+          "type": "prop",
+          "settings": {
+            "heading": "Responsive experience",
+            "text": "Designed for every screen"
+          }
+        },
+        "prop3": {
+          "type": "prop",
+          "settings": {
+            "heading": "Clear product details",
+            "text": "Information where it matters"
+          }
+        }
+      },
+      "block_order": ["prop1", "prop2", "prop3"]
+    }
+  },
+  "order": ["main", "value_props"]
+}
