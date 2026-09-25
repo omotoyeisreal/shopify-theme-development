@@ -1,0 +1,16 @@
+{% assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true %}
+{% if pick_up_availabilities.size > 0 %}
+  <div class="pickup-availability" aria-live="polite">
+    <strong>Pickup availability</strong>
+    {% for availability in pick_up_availabilities %}
+      <div class="pickup-availability__location">
+        <span>{{ availability.location.name }}</span>
+        <span>{% if availability.available %}Available{% else %}Unavailable{% endif %}{% if availability.pick_up_time %} · {{ availability.pick_up_time }}{% endif %}</span>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% schema %}
+{"name":"Pickup availability","settings":[]}
+{% endschema %}
