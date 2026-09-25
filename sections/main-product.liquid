@@ -87,7 +87,8 @@
                 <label for="RecipientSendOn-{{ section.id }}">Send on</label>
                 <input id="RecipientSendOn-{{ section.id }}" type="date" name="properties[Send on]" value="{{ gift_card.send_on | date: '%Y-%m-%d' }}" min="{{ 'now' | date: '%Y-%m-%d' }}">
                 <input type="hidden" name="properties[__shopify_send_gift_card_to_recipient]" value="true">
-                <input type="hidden" name="properties[__shopify_offset]" value="0">
+                <input type="hidden" name="properties[__shopify_offset]" value="0" data-gift-card-offset>
+                {% if form.errors %}<div class="form-errors" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
               </fieldset>
             {% endif %}
           {% when 'buy_buttons' %}
@@ -121,6 +122,13 @@
     </div>
   </div>
 </section>
+
+<script>
+  (() => {
+    const offset = document.querySelector('[data-gift-card-offset]');
+    if (offset) offset.value = new Date().getTimezoneOffset();
+  })();
+</script>
 
 <script type="application/json" data-product-variants>{{ product.variants | json }}</script>
 
