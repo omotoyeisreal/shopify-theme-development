@@ -153,3 +153,31 @@ a { color: inherit; }
   .cart-summary__actions { flex-direction: column; }
   .footer__inner { flex-direction: column; }
 }
+
+
+.header__nav-item { position: relative; }
+.header__submenu { display: none; position: absolute; top: 100%; left: 0; min-width: 220px; padding: .75rem; background: #fff; border: 1px solid var(--border); box-shadow: 0 12px 30px rgba(0,0,0,.08); z-index: 20; }
+.header__nav-item:hover > .header__submenu,
+.header__nav-item:focus-within > .header__submenu { display: grid; gap: .5rem; }
+.header__submenu-item { position: relative; }
+.header__submenu-nested { display: grid; gap: .4rem; padding: .4rem 0 .2rem .75rem; }
+.header__actions { display: flex; align-items: center; gap: .75rem; }
+.header__actions shopify-account, .mobile-menu__account shopify-account { display: inline-block; }
+.menu-toggle { display: none; min-height: 40px; padding: .5rem .75rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; cursor: pointer; }
+.mobile-menu { border-top: 1px solid var(--border); padding-block: 1rem; }
+.mobile-menu__item { padding-block: .4rem; }
+.mobile-menu__submenu { display: grid; gap: .35rem; padding: .4rem 0 .4rem 1rem; }
+.mobile-menu__submenu-nested { display: grid; gap: .3rem; padding-left: 1rem; }
+.product-card__unit-price, .product__unit-price, .product__compare-price, .product__tax-note { color: var(--muted); font-size: .9rem; }
+.product__compare-price { margin-top: -.9rem; margin-bottom: .5rem; }
+.product-form__selling-plans, .gift-card-recipient { display: grid; gap: .5rem; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; }
+.gift-card-recipient input, .gift-card-recipient textarea { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: .7rem; }
+.footer__localization { display: flex; gap: .75rem; align-items: end; }
+.localization-form { display: flex; flex-wrap: wrap; gap: .75rem; align-items: end; }
+.localization-form label { display: grid; gap: .25rem; font-size: .8rem; }
+.localization-form select { min-height: 40px; border: 1px solid var(--border); border-radius: 8px; padding: .4rem .6rem; background: #fff; }
+.footer__shop-follow { display: flex; align-items: center; }
+.additional-checkout-buttons--vertical { display: grid; gap: .5rem; margin-top: .75rem; }
+@media (max-width: 900px) {
+  .menu-toggle { display: inline-flex; }
+}
