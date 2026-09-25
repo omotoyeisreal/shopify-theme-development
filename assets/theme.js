@@ -141,6 +141,11 @@
       }
     }
 
+    document.querySelectorAll('[data-swatch-option][data-swatch-value]').forEach((swatch) => {
+      const select = selectors.find((item) => item.name === 'options[' + swatch.dataset.swatchOption + ']');
+      swatch.setAttribute('aria-pressed', String(select && select.value === swatch.dataset.swatchValue));
+    });
+
     if (addButton) {
       addButton.disabled = !variant.available;
       addButton.textContent = variant.available ? 'Add to cart' : 'Sold out';
