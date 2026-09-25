@@ -214,3 +214,7 @@ a { color: inherit; }
 .pickup-availability { margin-top: 1.5rem; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; }
 .pickup-availability__location { display: flex; justify-content: space-between; gap: 1rem; padding-top: .75rem; margin-top: .75rem; border-top: 1px solid var(--border); }
 @media (max-width: 600px) { .pickup-availability__location { flex-direction: column; gap: .25rem; } }
+
+.footer__social { display: flex; gap: .5rem; align-items: center; }
+.footer__social a { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: 50%; text-decoration: none; font-weight: 700; }
+.footer__social a:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
