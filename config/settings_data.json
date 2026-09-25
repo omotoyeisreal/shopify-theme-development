@@ -1,11 +1,21 @@
 {
   "current": {
     "brand_primary": "#171717",
+    "brand_primary_foreground": "#ffffff",
+    "surface": "#f7f7f5",
+    "surface_foreground": "#171717",
+    "text": "#171717",
+    "muted": "#666666",
     "favicon": null
   },
   "presets": {
     "Flow MEDIA": {
       "brand_primary": "#171717",
+      "brand_primary_foreground": "#ffffff",
+      "surface": "#f7f7f5",
+      "surface_foreground": "#171717",
+      "text": "#171717",
+      "muted": "#666666",
       "favicon": null
     }
   }
