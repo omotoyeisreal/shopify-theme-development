@@ -10,7 +10,7 @@
         <div class="cart-list">
           {% for item in cart.items %}
             <article class="cart-item">
-              {% if item.image %}<a href="{{ item.url }}">{{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120, 180, 240', sizes: '120px', alt: item.image.alt | escape }}</a>{% endif %}
+              {% if item.image %}<a href="{{ item.url }}">{{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120, 180, 240', sizes: '120px', alt: item.image.alt | default: item.title | escape }}</a>{% endif %}
               <div class="cart-item__details">
                 <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
                 {% unless item.product.has_only_default_variant %}
@@ -33,6 +33,11 @@
               </div>
             </article>
           {% endfor %}
+        </div>
+
+        <div class="cart-note">
+          <label for="CartNote-{{ section.id }}">Order note</label>
+          <textarea id="CartNote-{{ section.id }}" name="note" rows="4">{{ cart.note | escape }}</textarea>
         </div>
 
         {% if cart.cart_level_discount_applications.size > 0 %}
