@@ -13,8 +13,38 @@
       {
         "type": "color",
         "id": "brand_primary",
-        "label": "Brand primary color",
+        "label": "Primary color",
         "default": "#171717"
+      },
+      {
+        "type": "color",
+        "id": "brand_primary_foreground",
+        "label": "Primary text color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "surface",
+        "label": "Surface color",
+        "default": "#f7f7f5"
+      },
+      {
+        "type": "color",
+        "id": "surface_foreground",
+        "label": "Surface text color",
+        "default": "#171717"
+      },
+      {
+        "type": "color",
+        "id": "text",
+        "label": "Text color",
+        "default": "#171717"
+      },
+      {
+        "type": "color",
+        "id": "muted",
+        "label": "Muted text color",
+        "default": "#666666"
       },
       {
         "type": "image_picker",
