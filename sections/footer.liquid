@@ -1,0 +1,20 @@
+<footer class="footer">
+  <div class="container footer__inner">
+    <span>{{ shop.name }}</span>
+    <span>{{ section.settings.text }}</span>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Footer text",
+      "default": "Built with Shopify Online Store 2.0"
+    }
+  ]
+}
+{% endschema %}
