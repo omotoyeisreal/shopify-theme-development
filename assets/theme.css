@@ -210,3 +210,7 @@ a { color: inherit; }
 .contact-form-wrapper { max-width: 720px; margin-top: 2rem; }
 .contact-form-wrapper form { display: grid; gap: .75rem; }
 .contact-form-wrapper input, .contact-form-wrapper textarea { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: .75rem; font: inherit; }
+
+.pickup-availability { margin-top: 1.5rem; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; }
+.pickup-availability__location { display: flex; justify-content: space-between; gap: 1rem; padding-top: .75rem; margin-top: .75rem; border-top: 1px solid var(--border); }
+@media (max-width: 600px) { .pickup-availability__location { flex-direction: column; gap: .25rem; } }
