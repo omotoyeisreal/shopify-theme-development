@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Designed for modern ecommerce",
+        "heading": "A storefront built around your customer.",
+        "text": "A responsive Shopify theme foundation focused on clarity, product discovery, and conversion opportunities.",
+        "button_label": "Shop collection",
+        "button_link": "/collections/all"
+      }
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Featured products",
+        "text": "Highlight a focused selection to help customers discover your products.",
+        "products_to_show": 4
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured"
+  ]
+}
