@@ -1,0 +1,53 @@
+<section class="section main-page">
+  <div class="container">
+    {% case request.page_type %}
+      {% when 'article' %}
+        <article>
+          <header class="section__header">
+            <p>{{ blog.title }}</p>
+            <h1>{{ article.title }}</h1>
+            <p>{{ article.published_at | date: "%B %d, %Y" }}</p>
+          </header>
+          {% if article.image %}{{ article.image | image_url: width: 1400 | image_tag: loading: 'eager', widths: '700, 1000, 1400', sizes: '100vw', alt: article.image.alt | default: article.title | escape }}{% endif %}
+          <div class="rte">{{ article.content }}</div>
+        </article>
+      {% when 'blog' %}
+        <header class="section__header"><h1>{{ blog.title }}</h1>{% if blog.articles_count > 0 %}<p>{{ blog.articles_count }} articles</p>{% endif %}</header>
+        {% paginate blog.articles by 12 %}
+          <div class="article-grid">
+            {% for article in blog.articles %}
+              <article>
+                {% if article.image %}{{ article.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(min-width: 901px) 33vw, 100vw', alt: article.image.alt | default: article.title | escape }}{% endif %}
+                <p>{{ article.published_at | date: "%B %d, %Y" }}</p>
+                <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+                <div class="rte">{{ article.excerpt_or_content | strip_html | truncate: 180 }}</div>
+              </article>
+            {% endfor %}
+          </div>
+          {% if paginate.pages > 1 %}<nav class="pagination" aria-label="Pagination">{% if paginate.previous %}<a href="{{ paginate.previous.url }}">Previous</a>{% endif %}<span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>{% if paginate.next %}<a href="{{ paginate.next.url }}">Next</a>{% endif %}</nav>{% endif %}
+        {% endpaginate %}
+      {% when 'list_collections' %}
+        <header class="section__header"><h1>Collections</h1></header>
+        {% paginate collections by 24 %}
+          <div class="collection-grid">
+            {% for collection in collections %}
+              <article>
+                <a href="{{ collection.url }}">
+                  {% if collection.featured_image %}{{ collection.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(min-width: 901px) 33vw, 100vw', alt: collection.featured_image.alt | default: collection.title | escape }}{% endif %}
+                  <h2>{{ collection.title }}</h2>
+                </a>
+                <p>{{ collection.products_count }} products</p>
+              </article>
+            {% endfor %}
+          </div>
+        {% endpaginate %}
+      {% else %}
+        <header class="section__header"><h1>{{ page.title }}</h1></header>
+        {% if page.content != blank %}<div class="rte">{{ page.content }}</div>{% else %}<p>Add content to this page from the Shopify admin.</p>{% endif %}
+    {% endcase %}
+  </div>
+</section>
+
+{% schema %}
+{"name":"Main page","settings":[],"presets":[{"name":"Main page"}]}
+{% endschema %}
