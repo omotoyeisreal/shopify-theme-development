@@ -95,6 +95,7 @@
   try { variants = JSON.parse(variantsElement.textContent); } catch (error) { return; }
 
   const selectors = [...productForm.querySelectorAll('[data-option-index]')];
+  const productRequiresSellingPlan = productForm.dataset.requiresSellingPlan === 'true';
   const galleryItems = [...document.querySelectorAll('[data-media-id]')];
   const formatMoney = (cents) => {
     const currency = document.documentElement.dataset.currency;
@@ -132,7 +133,7 @@
 
     sellingPlanInputs.forEach((input) => {
       const isOneTime = input.value === '';
-      const available = isOneTime ? !variant.requires_selling_plan : availablePlanIds.has(String(input.value));
+      const available = isOneTime ? !productRequiresSellingPlan : availablePlanIds.has(String(input.value));
       input.disabled = !available;
       const label = input.closest('label');
       if (label) label.hidden = !available;
