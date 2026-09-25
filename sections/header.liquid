@@ -8,10 +8,25 @@
       {% endfor %}
     </nav>
 
-    <a class="header__cart" href="{{ routes.cart_url }}">
-      Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}
-    </a>
+    <div class="header__actions">
+      <a class="header__cart" href="{{ routes.cart_url }}">
+        Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}
+      </a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="MobileMenu-{{ section.id }}" data-menu-toggle>
+        <span class="visually-hidden">Toggle navigation</span>
+        Menu
+      </button>
+    </div>
   </div>
+
+  <nav id="MobileMenu-{{ section.id }}" class="mobile-menu" aria-label="Mobile navigation" data-mobile-menu hidden>
+    <div class="container">
+      {% for link in section.settings.menu.links %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {% endfor %}
+    </div>
+  </nav>
 </header>
 
 {% schema %}
