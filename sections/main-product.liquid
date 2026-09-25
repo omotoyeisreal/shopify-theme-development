@@ -3,7 +3,7 @@
     <div class="product__media">
       <div class="product-gallery">
         {% for media in product.media %}
-          <a class="product-gallery__item" href="{{ media | image_url: width: 1800 }}">
+          <a class="product-gallery__item" href="{{ media | image_url: width: 1800 }}" data-media-id="{{ media.id }}">
             {% case media.media_type %}
               {% when 'image' %}
                 {{ media | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 800, 1000, 1200', sizes: '(min-width: 901px) 55vw, 100vw', alt: media.alt | default: product.title | escape }}
@@ -25,7 +25,11 @@
           {% when 'title' %}
             <h1 {{ block.shopify_attributes }}>{{ product.title }}</h1>
           {% when 'price' %}
-            <div class="product__price" data-product-price {{ block.shopify_attributes }}>{{ product.selected_or_first_available_variant.price | money }}</div>
+            {% assign current_variant = product.selected_or_first_available_variant %}
+            <div class="product__price" data-product-price {{ block.shopify_attributes }}>{{ current_variant.price | money }}</div>
+            <div class="product__compare-price" data-product-compare-price>{% if current_variant.compare_at_price > current_variant.price %}<s>{{ current_variant.compare_at_price | money }}</s>{% endif %}</div>
+            <div class="product__unit-price" data-product-unit-price>{% if current_variant.unit_price_measurement %}{{ current_variant.unit_price | money }} / {% if current_variant.unit_price_measurement.reference_value != 1 %}{{ current_variant.unit_price_measurement.reference_value }}{% endif %}{{ current_variant.unit_price_measurement.reference_unit }}{% endif %}</div>
+            {% if cart.taxes_included %}<p class="product__tax-note">Tax included in price.</p>{% endif %}
           {% when 'description' %}
             {% if product.description != blank %}<div class="product__description rte" {{ block.shopify_attributes }}>{{ product.description }}</div>{% endif %}
           {% when 'options' %}
@@ -34,7 +38,9 @@
                 {% for option in product.options_with_values %}
                   <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
                   <select id="Option-{{ section.id }}-{{ forloop.index0 }}" name="options[{{ option.name | escape }}]" data-option-index="{{ forloop.index0 }}">
-                    {% for value in option.values %}<option value="{{ value | escape }}">{{ value }}</option>{% endfor %}
+                    {% for value in option.values %}
+                      <option value="{{ value | escape }}" {% if value == product.selected_or_first_available_variant.options[forloop.index0] %}selected{% endif %}>{{ value }}</option>
+                    {% endfor %}
                   </select>
                 {% endfor %}
               </div>
@@ -42,12 +48,26 @@
           {% when 'quantity' %}
             <label for="Quantity-{{ section.id }}" {{ block.shopify_attributes }}>Quantity</label>
             <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" {{ block.shopify_attributes }}>
+          {% when 'selling_plans' %}
+            {% if product.selling_plan_groups.size > 0 %}
+              <fieldset class="product-form__selling-plans" {{ block.shopify_attributes }}>
+                <legend>Purchase options</legend>
+                {% unless product.requires_selling_plan %}<label><input type="radio" name="selling_plan" value="" checked> One-time purchase</label>{% endunless %}
+                {% for group in product.selling_plan_groups %}
+                  <p>{{ group.name }}</p>
+                  {% for plan in group.selling_plans %}
+                    <label><input type="radio" name="selling_plan" value="{{ plan.id }}" {% if product.requires_selling_plan and forloop.first and forloop.parentloop.first %}checked{% endif %}> {{ plan.name }}</label>
+                  {% endfor %}
+                {% endfor %}
+              </fieldset>
+            {% endif %}
           {% when 'buy_buttons' %}
             <div {{ block.shopify_attributes }}>
               <button class="button product-form__submit" type="submit" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %} data-add-to-cart>
                 {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
               </button>
               {% if block.settings.show_dynamic_checkout %}{{ form | payment_button }}{% endif %}
+              {{ form | payment_terms }}
             </div>
           {% when 'trust' %}
             <div class="product__trust" {{ block.shopify_attributes }}><span>✓ Secure checkout</span><span>✓ Clear product information</span><span>✓ Responsive shopping</span></div>
@@ -57,7 +77,6 @@
             {% render block %}
         {% endcase %}
       {% endfor %}
-
       {% endform %}
 
       {% if product.available %}
@@ -90,11 +109,12 @@
     {"type":"description","name":"Description","limit":1},
     {"type":"options","name":"Variant picker","limit":1},
     {"type":"quantity","name":"Quantity","limit":1},
+    {"type":"selling_plans","name":"Selling plans","limit":1},
     {"type":"buy_buttons","name":"Buy buttons","limit":1,"settings":[{"type":"checkbox","id":"show_dynamic_checkout","label":"Show accelerated checkout buttons","default":true}]},
     {"type":"trust","name":"Trust message","limit":1},
     {"type":"custom_liquid","name":"Custom Liquid","settings":[{"type":"liquid","id":"liquid","label":"Liquid code"}]},
     {"type":"@app"}
   ],
-  "presets":[{"name":"Main product","blocks":[{"type":"vendor"},{"type":"title"},{"type":"price"},{"type":"options"},{"type":"quantity"},{"type":"buy_buttons"},{"type":"description"},{"type":"trust"}]}]
+  "presets":[{"name":"Main product","blocks":[{"type":"vendor"},{"type":"title"},{"type":"price"},{"type":"options"},{"type":"quantity"},{"type":"selling_plans"},{"type":"buy_buttons"},{"type":"description"},{"type":"trust"}]}]
 }
 {% endschema %}
