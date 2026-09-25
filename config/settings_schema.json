@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Theme settings",
+    "settings": [
+      {
+        "type": "color",
+        "id": "brand_primary",
+        "label": "Brand primary color",
+        "default": "#171717"
+      }
+    ]
+  }
+]
