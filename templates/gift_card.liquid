@@ -1,1 +1,28 @@
-<!doctype html><html><head>{{ content_for_header }}{{ 'theme.css' | asset_url | stylesheet_tag }}</head><body><main class="section"><div class="container"><h1>{{ gift_card.initial_value | money }}</h1><p>Gift card for {{ shop.name }}</p>{% if gift_card.pass_url %}<p><a href="{{ gift_card.pass_url }}">Add to Apple Wallet</a></p>{% endif %}</div></main></body></html>
+{% layout none %}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ shop.name }} Gift Card</title>
+  {{ 'vendor/qrcode.js' | shopify_asset_url | script_tag }}
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+</head>
+<body>
+  <main class="section">
+    <div class="container gift-card">
+      <h1>{{ shop.name }}</h1>
+      <p>Gift card balance: {{ gift_card.balance | money }}</p>
+      {% if gift_card.enabled %}<p>Gift card code: <strong>{{ gift_card.code }}</strong></p>{% endif %}
+      {% if gift_card.recipient %}<p>For {{ gift_card.recipient.name | default: gift_card.recipient.email }}</p>{% endif %}
+      {% if gift_card.message %}<p>{{ gift_card.message }}</p>{% endif %}
+      {% if gift_card.send_on %}<p>Scheduled to send on {{ gift_card.send_on | date: "%B %d, %Y" }}</p>{% endif %}
+      <div id="gift-card-qr" aria-label="Gift card QR code"></div>
+      {% if gift_card.pass_url %}<p><a href="{{ gift_card.pass_url }}">Add to Apple Wallet</a></p>{% endif %}
+    </div>
+  </main>
+  <script>
+    new QRCode(document.getElementById('gift-card-qr'), { text: '{{ gift_card.qr_identifier | escape }}', width: 120, height: 120 });
+  </script>
+</body>
+</html>
