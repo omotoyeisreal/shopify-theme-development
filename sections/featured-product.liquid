@@ -26,6 +26,9 @@
         {% if featured_product.description != blank %}<div class="product__description rte">{{ featured_product.description }}</div>{% endif %}
         <button class="button" type="submit" {% unless featured_product.selected_or_first_available_variant.available %}disabled{% endunless %}>{% if featured_product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}</button>
         {{ form | payment_button }}
+        {% for block in section.blocks %}
+          {% render block %}
+        {% endfor %}
       {% endform %}
     </div>
   </div>
