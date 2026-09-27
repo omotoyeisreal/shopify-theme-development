@@ -2,25 +2,51 @@
   "sections": {
     "hero": {
       "type": "hero",
-      "settings": {
-        "eyebrow": "Designed for modern ecommerce",
-        "heading": "A storefront built around your customer.",
-        "text": "A responsive Shopify theme foundation focused on clarity, product discovery, and conversion opportunities.",
-        "button_label": "Shop collection",
-        "button_link": "/collections/all"
-      }
+      "settings": {}
+    },
+    "value-props": {
+      "type": "value-props",
+      "settings": {}
+    },
+    "featured-collections": {
+      "type": "featured-collections",
+      "blocks": {
+        "collection-1": {"type":"collection"},
+        "collection-2": {"type":"collection"},
+        "collection-3": {"type":"collection"}
+      },
+      "block_order": ["collection-1","collection-2","collection-3"],
+      "settings": {}
     },
     "featured": {
       "type": "featured-collection",
-      "settings": {
-        "heading": "Featured products",
-        "text": "Highlight a focused selection to help customers discover your products.",
-        "products_to_show": 4
-      }
+      "settings": {}
+    },
+    "flow-path": {
+      "type": "flow-path",
+      "settings": {}
+    },
+    "featured-product": {
+      "type": "featured-product",
+      "settings": {}
+    },
+    "editorial": {
+      "type": "editorial-split",
+      "settings": {}
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {}
     }
   },
   "order": [
     "hero",
-    "featured"
+    "value-props",
+    "featured-collections",
+    "featured",
+    "flow-path",
+    "featured-product",
+    "editorial",
+    "newsletter"
   ]
 }
