@@ -1,6 +1,13 @@
-<header class="header">
+<header class="header{% if section.settings.sticky %} header--sticky{% endif %}" style="--header-bg: {{ section.settings.background }}; --header-text: {{ section.settings.text_color }};">
   <div class="container header__inner">
-    <a class="header__logo" href="{{ routes.root_url }}">{{ shop.name }}</a>
+    <a class="header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+      {% if section.settings.logo %}
+        {{ section.settings.logo | image_url: width: 600 | image_tag: widths: '180, 300, 450, 600', sizes: '(min-width: 901px) 220px, 160px', loading: 'eager', alt: shop.name, class: 'header__logo-image' }}
+      {% else %}
+        <span>{{ shop.name }}</span>
+      {% endif %}
+    </a>
+
     <nav class="header__nav" aria-label="Main navigation">
       {% for link in section.settings.menu.links %}
         <div class="header__nav-item">
@@ -9,7 +16,7 @@
             <button class="header__submenu-toggle" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="DesktopSubmenu-{{ section.id }}-{{ forloop.index }}">
               <span class="visually-hidden">Toggle {{ link.title }} navigation</span>
             </button>
-            <div id="DesktopSubmenu-{{ section.id }}-{{ forloop.index }}" class="header__submenu">
+            <div id="DesktopSubmenu-{{ section.id }}-{{ forloop.index }}" class="header__submenu" hidden>
               {% for child_link in link.links %}
                 <div class="header__submenu-item">
                   <a href="{{ child_link.url }}"{% if child_link.current %} aria-current="page"{% endif %}>{{ child_link.title }}</a>
@@ -17,7 +24,7 @@
                     <button class="header__nested-toggle" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="DesktopNested-{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}">
                       <span class="visually-hidden">Toggle {{ child_link.title }} navigation</span>
                     </button>
-                    <div id="DesktopNested-{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}" class="header__submenu-nested">
+                    <div id="DesktopNested-{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}" class="header__submenu-nested" hidden>
                       {% for grandchild_link in child_link.links %}<a href="{{ grandchild_link.url }}"{% if grandchild_link.current %} aria-current="page"{% endif %}>{{ grandchild_link.title }}</a>{% endfor %}
                     </div>
                   {% endif %}
@@ -28,77 +35,83 @@
         </div>
       {% endfor %}
     </nav>
+
     <div class="header__actions">
-      {% if shop.customer_accounts_enabled %}<shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account>{% endif %}
-      <form class="header__search" action="{{ routes.search_url }}" method="get" role="search">
-        <label class="visually-hidden" for="HeaderSearch-{{ section.id }}">Search</label>
-        <input id="HeaderSearch-{{ section.id }}" type="search" name="q" placeholder="Search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-predictive-search aria-controls="PredictiveSearch-{{ section.id }}" aria-expanded="false" aria-haspopup="listbox" aria-autocomplete="list">
-        <input type="hidden" name="options[prefix]" value="last">
-        <button type="submit">Search</button>
-      </form>
-      <a class="header__cart" href="{{ routes.cart_url }}">Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}</a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="MobileMenu-{{ section.id }}" data-menu-toggle><span class="visually-hidden">Toggle navigation</span>Open menu</button>
+      {% if section.settings.show_search %}
+        <a class="header__icon-link" href="{{ routes.search_url }}" aria-label="Search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span class="header__icon-label">Search</span>
+        </a>
+      {% endif %}
+      {% if shop.customer_accounts_enabled and section.settings.show_account %}
+        <shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account>
+      {% endif %}
+      {% if section.settings.show_cart %}
+        <a class="header__cart" href="{{ routes.cart_url }}">Cart{% if cart.item_count > 0 %} <span class="header__cart-count">{{ cart.item_count }}</span>{% endif %}</a>
+      {% endif %}
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="MobileMenu-{{ section.id }}" data-menu-toggle>
+        <span class="visually-hidden">Toggle navigation</span><span aria-hidden="true">Menu</span>
+      </button>
     </div>
   </div>
-  <nav id="MobileMenu-{{ section.id }}" class="mobile-menu" aria-label="Mobile navigation" data-mobile-menu>
+
+  <nav id="MobileMenu-{{ section.id }}" class="mobile-menu" aria-label="Mobile navigation" data-mobile-menu hidden>
     <div class="container">
-      {% if shop.customer_accounts_enabled %}<div class="mobile-menu__account"><shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account></div>{% endif %}
+      {% if section.settings.show_search %}<form class="mobile-menu__search" action="{{ routes.search_url }}" method="get" role="search"><label class="visually-hidden" for="MobileSearch-{{ section.id }}">Search</label><input id="MobileSearch-{{ section.id }}" type="search" name="q" placeholder="Search products" autocomplete="off"><input type="hidden" name="options[prefix]" value="last"><button class="button" type="submit">Search</button></form>{% endif %}
+      {% if shop.customer_accounts_enabled and section.settings.show_account %}<div class="mobile-menu__account"><shopify-account menu="{{ section.settings.customer_account_menu }}"></shopify-account></div>{% endif %}
       {% for link in section.settings.menu.links %}
         <div class="mobile-menu__item">
           <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
-          {% if link.links.size > 0 %}
-            <div class="mobile-menu__submenu">
-              {% for child_link in link.links %}
-                <a href="{{ child_link.url }}"{% if child_link.current %} aria-current="page"{% endif %}>{{ child_link.title }}</a>
-                {% if child_link.links.size > 0 %}<div class="mobile-menu__submenu-nested">{% for grandchild_link in child_link.links %}<a href="{{ grandchild_link.url }}"{% if grandchild_link.current %} aria-current="page"{% endif %}>{{ grandchild_link.title }}</a>{% endfor %}</div>{% endif %}
-              {% endfor %}
-            </div>
-          {% endif %}
+          {% if link.links.size > 0 %}<div class="mobile-menu__submenu">{% for child_link in link.links %}<a href="{{ child_link.url }}"{% if child_link.current %} aria-current="page"{% endif %}>{{ child_link.title }}</a>{% endfor %}</div>{% endif %}
         </div>
       {% endfor %}
     </div>
   </nav>
-  <script>
-    (() => {
-      const setMenuState = (button, expanded) => {
-        button.setAttribute('aria-expanded', String(expanded));
-        const menu = document.getElementById(button.getAttribute('aria-controls'));
-        if (menu) menu.hidden = !expanded;
-      };
-
-      const closeAll = (except) => {
-        document.querySelectorAll('.header__submenu-toggle[aria-expanded="true"]').forEach((button) => {
-          if (button !== except) setMenuState(button, false);
-        });
-        document.querySelectorAll('.header__nested-toggle[aria-expanded="true"]').forEach((button) => {
-          if (button !== except) setMenuState(button, false);
-        });
-      };
-
-      document.querySelectorAll('.header__submenu-toggle, .header__nested-toggle').forEach((button) => {
-        const menu = document.getElementById(button.getAttribute('aria-controls'));
-        if (menu) menu.hidden = true;
-
-        button.addEventListener('click', () => {
-          const expanded = button.getAttribute('aria-expanded') === 'true';
-          closeAll(expanded ? null : button);
-          setMenuState(button, !expanded);
-        });
-      });
-
-      document.querySelectorAll('.header__submenu, .header__submenu-nested').forEach((menu) => {
-        menu.addEventListener('keydown', (event) => {
-          if (event.key !== 'Escape') return;
-          const button = document.querySelector('[aria-controls="' + menu.id + '"]');
-          if (button) {
-            setMenuState(button, false);
-            button.focus();
-          }
-        });
-      });
-    })();
-  </script>
 </header>
+
+<script>
+  (() => {
+    const setMenuState = (button, expanded) => {
+      button.setAttribute('aria-expanded', String(expanded));
+      const menu = document.getElementById(button.getAttribute('aria-controls'));
+      if (menu) menu.hidden = !expanded;
+    };
+    const closeAll = (except) => {
+      document.querySelectorAll('.header__submenu-toggle[aria-expanded="true"], .header__nested-toggle[aria-expanded="true"]').forEach((button) => {
+        if (button !== except) setMenuState(button, false);
+      });
+    };
+    document.querySelectorAll('.header__submenu-toggle, .header__nested-toggle').forEach((button) => {
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        closeAll(expanded ? null : button);
+        setMenuState(button, !expanded);
+      });
+    });
+    document.querySelectorAll('.header__submenu, .header__submenu-nested').forEach((menu) => {
+      menu.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        const button = document.querySelector('[aria-controls="' + menu.id + '"]');
+        if (button) { setMenuState(button, false); button.focus(); }
+      });
+    });
+  })();
+</script>
+
 {% schema %}
-{"name":"Header","settings":[{"type":"link_list","id":"menu","label":"Navigation menu","default":"main-menu"},{"type":"link_list","id":"customer_account_menu","label":"Customer account menu","default":"customer-account-main-menu"}]}
+{
+  "name":"Header",
+  "settings":[
+    {"type":"image_picker","id":"logo","label":"Logo"},
+    {"type":"range","id":"logo_width","label":"Logo width","min":80,"max":320,"step":10,"unit":"px","default":190},
+    {"type":"link_list","id":"menu","label":"Main menu","default":"main-menu"},
+    {"type":"link_list","id":"customer_account_menu","label":"Customer account menu","default":"customer-account-main-menu"},
+    {"type":"checkbox","id":"sticky","label":"Enable sticky header","default":true},
+    {"type":"checkbox","id":"show_search","label":"Show search","default":true},
+    {"type":"checkbox","id":"show_account","label":"Show customer account","default":true},
+    {"type":"checkbox","id":"show_cart","label":"Show cart","default":true},
+    {"type":"color","id":"background","label":"Background color","default":"#ffffff"},
+    {"type":"color","id":"text_color","label":"Text color","default":"#171717"}
+  ]
+}
 {% endschema %}
