@@ -1,0 +1,21 @@
+<section class="section editorial-split editorial-split--{{ section.settings.image_position }}">
+  <div class="container editorial-split__grid">
+    <div class="editorial-split__media">{% if section.settings.image %}{{ section.settings.image | image_url: width: 1600 | image_tag: widths: '600, 900, 1200, 1600', sizes: '(min-width: 901px) 50vw, 100vw', loading: 'lazy', alt: section.settings.image.alt | default: section.settings.heading | escape }}{% else %}{{ 'lifestyle-2' | placeholder_svg_tag: 'editorial-split__placeholder' }}{% endif %}</div>
+    <div class="editorial-split__content"><p class="section__eyebrow">{{ section.settings.eyebrow }}</p><h2>{{ section.settings.heading }}</h2><div class="rte">{{ section.settings.text }}</div>{% if section.settings.button_label != blank and section.settings.button_link != blank %}<a class="button" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>{% endif %}</div>
+  </div>
+</section>
+{% schema %}
+{
+  "name":"Editorial split",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Built for brand stories"},
+    {"type":"text","id":"heading","label":"Heading","default":"Give your products room to tell a bigger story."},
+    {"type":"richtext","id":"text","label":"Body text","default":"<p>Combine imagery, editorial copy, and a focused call to action to create a more memorable storefront experience.</p>"},
+    {"type":"image_picker","id":"image","label":"Image"},
+    {"type":"select","id":"image_position","label":"Image position","options":[{"value":"left","label":"Left"},{"value":"right","label":"Right"}],"default":"left"},
+    {"type":"text","id":"button_label","label":"Button label","default":"Explore collection"},
+    {"type":"url","id":"button_link","label":"Button link","default":"/collections/all"}
+  ],
+  "presets":[{"name":"Editorial split"}]
+}
+{% endschema %}
