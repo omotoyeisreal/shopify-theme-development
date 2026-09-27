@@ -1,4 +1,4 @@
-<header class="header{% if section.settings.sticky %} header--sticky{% endif %}" style="--header-bg: {{ section.settings.background }}; --header-text: {{ section.settings.text_color }};">
+<header class="header{% if section.settings.sticky %} header--sticky{% endif %}" style="--header-bg: {{ section.settings.background }}; --header-text: {{ section.settings.text_color }}; --header-logo-width: {{ section.settings.logo_width }}px;">
   <div class="container header__inner">
     <a class="header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
       {% if section.settings.logo %}
