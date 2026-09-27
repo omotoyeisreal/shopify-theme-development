@@ -1,4 +1,4 @@
-{% assign collection = collections[section.settings.collection] %}
+{% assign collection = section.settings.collection | default: collections.all %}
 
 <section class="section">
   <div class="container">
@@ -16,7 +16,7 @@
         {% endfor %}
       </div>
     {% else %}
-      <p>Select a collection in the theme editor to display products.</p>
+      <p>Showing products from your all-products collection. Choose a collection in the theme editor to curate this section.</p>
     {% endif %}
   </div>
 </section>
