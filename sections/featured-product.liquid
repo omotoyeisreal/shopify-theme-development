@@ -1,4 +1,4 @@
-{% assign featured_product = section.settings.product %}
+{% assign featured_product = section.settings.product | default: collections.all.products.first %}
 {% if featured_product != blank %}
 <section class="section featured-product">
   <div class="container product__layout">
